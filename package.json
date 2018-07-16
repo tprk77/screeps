@@ -1,0 +1,13 @@
+{
+  "name": "@tprk77/screeps",
+  "version": "1.0.0",
+  "description": "Tim's Screeps Code",
+  "author": "Tim Perkins",
+  "license": "MIT",
+  "repository": "github:tprk77/screeps",
+  "private": true,
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  }
+}
