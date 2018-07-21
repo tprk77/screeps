@@ -2,6 +2,7 @@
 
 import { Builder } from "./roles/builder";
 import { Harvester } from "./roles/harvester";
+import { Upgrader } from "./roles/upgrader";
 
 declare global {
   interface CreepMemory {
@@ -21,6 +22,7 @@ export const loop = () => {
 
   const harvesters = _.filter(Game.creeps, (creep) => creep.memory.role === "harvester");
   const builders = _.filter(Game.creeps, (creep) => creep.memory.role === "builder");
+  const upgraders = _.filter(Game.creeps, (creep) => creep.memory.role === "upgrader");
 
   if (harvesters.length < 4) {
     const newName = "Harvester" + Game.time;
@@ -34,6 +36,12 @@ export const loop = () => {
     Game.spawns.Spawn1.spawnCreep(
       [CARRY, CARRY, WORK, WORK, MOVE, MOVE],
       newName, {memory: {role: "builder"} as CreepMemory});
+  } else if (upgraders.length < 6) {
+    const newName = "Upgrader" + Game.time;
+    console.log("Spawning new upgrader: " + newName);
+    Game.spawns.Spawn1.spawnCreep(
+      [CARRY, CARRY, WORK, WORK, MOVE, MOVE],
+      newName, {memory: {role: "upgrader"} as CreepMemory});
   }
 
   for (const name in Game.creeps) {
@@ -42,6 +50,8 @@ export const loop = () => {
       Harvester.run(creep);
     } else if (creep.memory.role === "builder") {
       Builder.run(creep);
+    } else if (creep.memory.role === "upgrader") {
+      Upgrader.run(creep);
     }
   }
 };
