@@ -1,0 +1,11 @@
+# Node modules
+/node_modules/
+
+# Rollup Cache
+/.rpt2_cache/
+
+# Transpiled code, etc
+/dist/
+
+# Upload config with auth token
+/.screeps.json
