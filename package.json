@@ -6,8 +6,12 @@
   "license": "MIT",
   "repository": "github:tprk77/screeps",
   "private": true,
-  "main": "main.js",
+  "main": "dist/main.js",
   "scripts": {
+    "lint": "tslint -p tsconfig.json \"src/**/*.ts\"",
+    "build": "rollup -c",
+    "upload": "rollup -c --environment DEST:main",
+    "uploadw": "rollup -cw --environment DEST:main",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "devDependencies": {
