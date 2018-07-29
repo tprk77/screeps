@@ -3,6 +3,7 @@
 import { Attacker } from "./roles/attacker";
 import { Builder } from "./roles/builder";
 import { Harvester } from "./roles/harvester";
+import { Tower } from "./roles/tower";
 import { Upgrader } from "./roles/upgrader";
 import { Waller } from "./roles/waller";
 
@@ -20,6 +21,15 @@ export const loop = () => {
     if (!(name in Game.creeps)) {
       delete Memory.creeps[name];
     }
+  }
+
+  const towers = _.filter(
+    Game.structures, (structure) =>
+      structure.structureType === STRUCTURE_TOWER
+  ) as StructureTower[];
+
+  for (const tower of towers) {
+    Tower.run(tower);
   }
 
   const harvesters = _.filter(Game.creeps, (creep) => creep.memory.role === "harvester");
