@@ -8,17 +8,16 @@ export class Harvester {
         creep.moveTo(sources[1], {visualizePathStyle: {stroke: "#ffaa00"}});
       }
     } else {
-      const targets = creep.room.find(FIND_STRUCTURES, {
-        filter: (structure) => {
-          return ((structure.structureType === STRUCTURE_EXTENSION ||
-                   structure.structureType === STRUCTURE_SPAWN ||
-                   structure.structureType === STRUCTURE_TOWER)
-                  && structure.energy < structure.energyCapacity);
-        }
+      const consumers = creep.room.find(FIND_STRUCTURES, {
+        filter: (structure) =>
+          ((structure.structureType === STRUCTURE_EXTENSION
+            || structure.structureType === STRUCTURE_SPAWN
+            || structure.structureType === STRUCTURE_TOWER)
+           && structure.energy < structure.energyCapacity)
       });
-      if (targets.length) {
-        if (creep.transfer(targets[0], RESOURCE_ENERGY) === ERR_NOT_IN_RANGE) {
-          creep.moveTo(targets[0], {visualizePathStyle: {stroke: "#ffffff"}});
+      if (consumers.length) {
+        if (creep.transfer(consumers[0], RESOURCE_ENERGY) === ERR_NOT_IN_RANGE) {
+          creep.moveTo(consumers[0], {visualizePathStyle: {stroke: "#ffffff"}});
         }
       }
     }
