@@ -8,4 +8,7 @@ SpacesInContainerLiterals: false
 BreakBeforeBinaryOperators: NonAssignment
 JavaScriptQuotes: Double
 JavaScriptWrapImports: true
+AllowShortCaseLabelsOnASingleLine: true
+AllowShortIfStatementsOnASingleLine: true
+AllowShortLoopsOnASingleLine: true
 ...
