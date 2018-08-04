@@ -24,7 +24,7 @@ export const loop = () => {
   }
 
   const towers =
-    (_.filter(Game.structures, (structure) => {structure.structureType === STRUCTURE_TOWER) as
+      (_.filter(Game.structures, (structure) => structure.structureType === STRUCTURE_TOWER) as
        StructureTower[]);
 
   for (const tower of towers) {
