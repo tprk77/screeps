@@ -17,11 +17,10 @@ export class Harvester {
     }
     if (!creep.memory.harvesting) {
       const consumers = creep.room.find(FIND_STRUCTURES, {
-        filter: (structure) =>
-          ((structure.structureType === STRUCTURE_EXTENSION
-            || structure.structureType === STRUCTURE_SPAWN
-            || structure.structureType === STRUCTURE_TOWER)
-           && structure.energy < structure.energyCapacity)
+        filter: (structure) => ((structure.structureType === STRUCTURE_EXTENSION
+                                 || structure.structureType === STRUCTURE_SPAWN
+                                 || structure.structureType === STRUCTURE_TOWER)
+                                && structure.energy < structure.energyCapacity),
       });
       if (consumers.length) {
         if (creep.transfer(consumers[0], RESOURCE_ENERGY) === ERR_NOT_IN_RANGE) {

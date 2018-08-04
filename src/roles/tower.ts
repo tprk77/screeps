@@ -11,7 +11,7 @@ export class Tower {
       // Only repair if we have enough energy to attack
       const closestDamagedStructure = tower.pos.findClosestByRange(FIND_STRUCTURES, {
         filter: (structure) =>
-          structure.structureType !== STRUCTURE_WALL && structure.hits < structure.hitsMax
+            structure.structureType !== STRUCTURE_WALL && structure.hits < structure.hitsMax,
       });
       if (closestDamagedStructure) {
         tower.repair(closestDamagedStructure);
