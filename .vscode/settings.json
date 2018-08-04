@@ -8,5 +8,6 @@
     ".rpt2_cache/**": true,
     "dist/**": true
   },
-  "typescript.tsdk": "./node_modules/typescript/lib"
+  "typescript.tsdk": "./node_modules/typescript/lib",
+  "clang-format.executable": "${workspaceRoot}/node_modules/.bin/clang-format"
 }
