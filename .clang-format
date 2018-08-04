@@ -1,0 +1,11 @@
+# Clang-Format configuration file for automatically formatting source code
+---
+Language: JavaScript
+IndentWidth: 2
+TabWidth: 2
+ColumnLimit: 100
+SpacesInContainerLiterals: false
+BreakBeforeBinaryOperators: NonAssignment
+JavaScriptQuotes: Double
+JavaScriptWrapImports: true
+...

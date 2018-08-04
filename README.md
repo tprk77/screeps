@@ -52,11 +52,20 @@ Once that's done, run this command:
 
 This will build and upload your code to the official Screeps server.
 
+## Visual Studio Code ##
+
+If you're looking for a text editor suggestion, I would consider [Visual
+Studio Code][vscode]. It seems to work really well with TypeScript. If you do
+end up using Visual Studio Code, make sure you download the `Clang-Format`
+extension (use `Ctrl + Shift + X`). It should automatically pick up the
+project settings. Press `Ctrl + Shift + I` to format code.
+
 
 <!-- References -->
 
 [node]: https://nodejs.org/en/
 [account]: https://screeps.com/a/#!/account
+[vscode]: https://code.visualstudio.com/
 
 
 <!-- Local Variables: -->

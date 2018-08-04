@@ -1,11 +1,11 @@
 // Copyright (c) 2018 Tim Perkins
 
-import { Attacker } from "./roles/attacker";
-import { Builder } from "./roles/builder";
-import { Harvester } from "./roles/harvester";
-import { Tower } from "./roles/tower";
-import { Upgrader } from "./roles/upgrader";
-import { Waller } from "./roles/waller";
+import {Attacker} from "./roles/attacker";
+import {Builder} from "./roles/builder";
+import {Harvester} from "./roles/harvester";
+import {Tower} from "./roles/tower";
+import {Upgrader} from "./roles/upgrader";
+import {Waller} from "./roles/waller";
 
 declare global {
   interface CreepMemory {
@@ -23,10 +23,9 @@ export const loop = () => {
     }
   }
 
-  const towers = _.filter(
-    Game.structures, (structure) =>
-      structure.structureType === STRUCTURE_TOWER
-  ) as StructureTower[];
+  const towers =
+    (_.filter(Game.structures, (structure) => {structure.structureType === STRUCTURE_TOWER) as
+       StructureTower[]);
 
   for (const tower of towers) {
     Tower.run(tower);
@@ -38,36 +37,33 @@ export const loop = () => {
   const wallers = _.filter(Game.creeps, (creep) => creep.memory.role === "waller");
   const attackers = _.filter(Game.creeps, (creep) => creep.memory.role === "attacker");
 
+  const spawn = Game.spawns.Spawn1;
+
   if (harvesters.length < 4) {
     const newName = "Harvester" + Game.time;
     console.log("Spawning new harvester: " + newName);
-    Game.spawns.Spawn1.spawnCreep(
-      [CARRY, CARRY, WORK, WORK, MOVE, MOVE],
-      newName, {memory: {role: "harvester"} as CreepMemory});
+    spawn.spawnCreep([CARRY, CARRY, WORK, WORK, MOVE, MOVE], newName,
+                     {memory: {role: "harvester"} as CreepMemory});
   } else if (builders.length < 4) {
     const newName = "Builder" + Game.time;
     console.log("Spawning new builder: " + newName);
-    Game.spawns.Spawn1.spawnCreep(
-      [CARRY, CARRY, WORK, WORK, MOVE, MOVE],
-      newName, {memory: {role: "builder"} as CreepMemory});
+    spawn.spawnCreep([CARRY, CARRY, WORK, WORK, MOVE, MOVE], newName,
+                     {memory: {role: "builder"} as CreepMemory});
   } else if (upgraders.length < 6) {
     const newName = "Upgrader" + Game.time;
     console.log("Spawning new upgrader: " + newName);
-    Game.spawns.Spawn1.spawnCreep(
-      [CARRY, CARRY, WORK, WORK, MOVE, MOVE],
-      newName, {memory: {role: "upgrader"} as CreepMemory});
+    spawn.spawnCreep([CARRY, CARRY, WORK, WORK, MOVE, MOVE], newName,
+                     {memory: {role: "upgrader"} as CreepMemory});
   } else if (wallers.length < 2) {
     const newName = "Waller" + Game.time;
     console.log("Spawning new waller: " + newName);
-    Game.spawns.Spawn1.spawnCreep(
-      [CARRY, CARRY, WORK, WORK, MOVE, MOVE],
-      newName, {memory: {role: "waller"} as CreepMemory});
+    spawn.spawnCreep([CARRY, CARRY, WORK, WORK, MOVE, MOVE], newName,
+                     {memory: {role: "waller"} as CreepMemory});
   } else if (attackers.length < 6) {
     const newName = "Attacker" + Game.time;
     console.log("Spawning new attacker: " + newName);
-    Game.spawns.Spawn1.spawnCreep(
-      [ATTACK, ATTACK, ATTACK, MOVE, MOVE, MOVE],
-      newName, {memory: {role: "attacker", flagId: "AttackFlag"} as CreepMemory});
+    spawn.spawnCreep([ATTACK, ATTACK, ATTACK, MOVE, MOVE, MOVE], newName,
+                     {memory: {role: "attacker", flagId: "AttackFlag"} as CreepMemory});
   }
 
   for (const name in Game.creeps) {

@@ -20,7 +20,7 @@ export class Waller {
     }
     if (creep.memory.walling) {
       const wallSites = creep.room.find(FIND_CONSTRUCTION_SITES, {
-        filter: (structure) => structure.structureType === STRUCTURE_WALL
+        filter: (structure) => structure.structureType === STRUCTURE_WALL,
       });
       if (wallSites.length) {
         if (creep.build(wallSites[0]) === ERR_NOT_IN_RANGE) {
@@ -29,14 +29,13 @@ export class Waller {
       } else {
         const walls = creep.room.find(FIND_STRUCTURES, {
           filter: (structure) =>
-            (structure.structureType === STRUCTURE_WALL
-             && structure.hits < Waller.WALL_MAX_HITS)
+              structure.structureType === STRUCTURE_WALL && structure.hits < Waller.WALL_MAX_HITS,
         });
         const wallGroups = _.groupBy(walls, (wall) => {
           return _.find(Waller.WALL_GROUP_HITS, (groupHits) => wall.hits < groupHits);
         });
-        const lowestGroupHits = _.find(
-          Waller.WALL_GROUP_HITS, (groupHits) => groupHits in wallGroups);
+        const lowestGroupHits =
+            _.find(Waller.WALL_GROUP_HITS, (groupHits) => groupHits in wallGroups);
         const wall = lowestGroupHits ? wallGroups[lowestGroupHits][0] : null;
         if (wall) {
           if (creep.repair(wall) === ERR_NOT_IN_RANGE) {
