@@ -13,7 +13,10 @@ declare global {
   }
 }
 
-export const loop = () => {
+/**
+ * The main loop!
+ */
+export function loop() {
   console.log("Current game tick is " + Game.time);
 
   // Automatically delete memory of missing creeps
@@ -80,4 +83,4 @@ export const loop = () => {
       Attacker.run(creep);
     }
   }
-};
+}
