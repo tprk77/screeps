@@ -11,7 +11,7 @@ export class Harvester {
     if (!creep.memory.harvesting && creep.carry.energy === 0) {
       creep.memory.harvesting = true;
       creep.say("Harvest");
-    } else if (creep.memory.upgrading && creep.carry.energy === creep.carryCapacity) {
+    } else if (creep.memory.harvesting && creep.carry.energy === creep.carryCapacity) {
       creep.memory.harvesting = false;
       creep.say("Deposit");
     }
