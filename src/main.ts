@@ -14,6 +14,15 @@ declare global {
 }
 
 /**
+ * Get the total cost of some parts.
+ * @param parts The parts to get the cost of.
+ * @return The cost of all the parts.
+ */
+export function getPartsCost(parts: BodyPartConstant[]): number {
+  return _.sum(parts, (part) => BODYPART_COST[part]);
+}
+
+/**
  * The main loop!
  */
 export function loop() {
