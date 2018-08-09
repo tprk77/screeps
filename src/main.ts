@@ -132,6 +132,34 @@ export function getBestPartsForEnergy(energy: number, partTemplate: BodyPartCons
 }
 
 /**
+ * Stores the energy and energy capacity for spawning.
+ */
+interface SpawnEnergy {
+  energy: number;
+  energyCapacity: number;
+}
+
+/**
+ * Get the room's energy and energy capacity for spawning.
+ * @param room The room to get the energy of.
+ * @return The spawning energy.
+ */
+export function getSpawnEnergy(room: Room): SpawnEnergy {
+  const spawnEnergy: SpawnEnergy = {energy: 0, energyCapacity: 0};
+  const spawningStructures = room.find(FIND_STRUCTURES, {
+    filter: (structure) => structure.structureType === STRUCTURE_SPAWN
+                           || structure.structureType === STRUCTURE_EXTENSION,
+  });
+  for (const spawningStructure of spawningStructures) {
+    // Force the type to have energy and energyCapacity
+    const spawnStructure = spawningStructure as StructureSpawn;
+    spawnEnergy.energy += spawnStructure.energy;
+    spawnEnergy.energyCapacity += spawnStructure.energyCapacity;
+  }
+  return spawnEnergy;
+}
+
+/**
  * The main loop!
  */
 export function loop() {
