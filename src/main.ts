@@ -147,8 +147,9 @@ interface SpawnEnergy {
 export function getSpawnEnergy(room: Room): SpawnEnergy {
   const spawnEnergy: SpawnEnergy = {energy: 0, energyCapacity: 0};
   const spawningStructures = room.find(FIND_STRUCTURES, {
-    filter: (structure) => structure.structureType === STRUCTURE_SPAWN
-                           || structure.structureType === STRUCTURE_EXTENSION,
+    filter: (structure) => ((structure.structureType === STRUCTURE_SPAWN
+                             || structure.structureType === STRUCTURE_EXTENSION)
+                            && structure.isActive()),
   });
   for (const spawningStructure of spawningStructures) {
     // Force the type to have energy and energyCapacity
