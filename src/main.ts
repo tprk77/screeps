@@ -23,6 +23,74 @@ export function getPartsCost(parts: BodyPartConstant[]): number {
 }
 
 /**
+ * Find a collection of parts below a certain energy budget.
+ * @param energy The energy budget. The cost of all parts shall not exceed this number.
+ * @param partGroups Any number of part groups to collect into the result. Each group is added to
+ * the result as a single unit. The groups are added in reverse order. The first group may be
+ * repeated in the result, according to the option.
+ * @param repeatGroup If true, repeat the first group if possible. True by default.
+ * @param minGroup If true, always return at least the last group, even if the cost of this group is
+ * greater than the energy budget. (Don't return an empty result.) True by default.
+ * @return The array of parts.
+ *
+ * **Example**
+ *
+ * Calling the following function:
+ *
+ *     getPartsForEnergy(X, [G, F], [E, D], [C, B, A])
+ *
+ * Could produce any of the following results:
+ *
+ *     [G, F, ..., G, F, E, D, C, B, A] // repeatGroup = true
+ *     [G, F, E, D, C, B, A]
+ *     [E, D, C, B, A]
+ *     [C, B, A]
+ *     [] // minGroup = false, Energy is below minimum cost!
+ */
+export function getPartsForEnergy(energy: number, partGroups: BodyPartConstant[][],
+                                  repeatGroup: boolean = true,
+                                  minGroup = true): BodyPartConstant[] {
+  const parts: BodyPartConstant[] = [];
+  let cost: number = 0;
+  let partGroup: BodyPartConstant[]|null = null;
+  let partGroupCost: number|null = null;
+  // Loop trough all part groups in reverse
+  for (let pgIndex = partGroups.length - 1; pgIndex >= 0; pgIndex--) {
+    const maybePartGroup = partGroups[pgIndex];
+    // Check for empty groups and stop early
+    if (maybePartGroup.length) {
+      partGroup = maybePartGroup;
+      partGroupCost = getPartsCost(partGroup);
+    } else {
+      partGroup = null;
+      partGroupCost = null;
+      break;
+    }
+    // Check the cost against the budget
+    if (cost + partGroupCost <= energy) {
+      cost += partGroupCost;
+      parts.push(...partGroup);
+    } else {
+      break;
+    }
+  }
+  // Maybe add some more groups
+  if (partGroup && partGroupCost) {
+    if (minGroup && !parts.length) {
+      // Add the min group if necessary
+      parts.push(...partGroup);
+    } else if (repeatGroup) {
+      // Try to repeat the last part group
+      while (cost + partGroupCost <= energy) {
+        cost += partGroupCost;
+        parts.push(...partGroup);
+      }
+    }
+  }
+  return parts;
+}
+
+/**
  * The main loop!
  */
 export function loop() {
