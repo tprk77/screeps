@@ -187,32 +187,42 @@ export function loop() {
   const attackers = _.filter(Game.creeps, (creep) => creep.memory.role === "attacker");
 
   const spawn = Game.spawns.Spawn1;
+  const spawnEnergy = getSpawnEnergy(spawn.room);
+
+  const bestWorkerParts = getBestPartsForEnergy(
+      spawnEnergy.energy,
+      [CARRY, WORK, MOVE],
+      [[CARRY, WORK, MOVE]],
+  );
+
+  const bestAttackerParts = getBestPartsForEnergy(
+      spawnEnergy.energy,
+      [TOUGH, ATTACK, MOVE],
+      [[TOUGH, TOUGH, TOUGH, MOVE, MOVE, MOVE], [ATTACK, ATTACK, ATTACK, MOVE, MOVE, MOVE]],
+      false,
+  );
 
   if (harvesters.length < 4) {
     const newName = "Harvester" + Game.time;
     console.log("Spawning new harvester: " + newName);
-    spawn.spawnCreep([CARRY, CARRY, WORK, WORK, MOVE, MOVE], newName,
-                     {memory: {role: "harvester"} as CreepMemory});
+    spawn.spawnCreep(bestWorkerParts, newName, {memory: {role: "harvester"} as CreepMemory});
   } else if (builders.length < 4) {
     const newName = "Builder" + Game.time;
     console.log("Spawning new builder: " + newName);
-    spawn.spawnCreep([CARRY, CARRY, WORK, WORK, MOVE, MOVE], newName,
-                     {memory: {role: "builder"} as CreepMemory});
+    spawn.spawnCreep(bestWorkerParts, newName, {memory: {role: "builder"} as CreepMemory});
   } else if (upgraders.length < 6) {
     const newName = "Upgrader" + Game.time;
     console.log("Spawning new upgrader: " + newName);
-    spawn.spawnCreep([CARRY, CARRY, WORK, WORK, MOVE, MOVE], newName,
-                     {memory: {role: "upgrader"} as CreepMemory});
+    spawn.spawnCreep(bestWorkerParts, newName, {memory: {role: "upgrader"} as CreepMemory});
   } else if (wallers.length < 2) {
     const newName = "Waller" + Game.time;
     console.log("Spawning new waller: " + newName);
-    spawn.spawnCreep([CARRY, CARRY, WORK, WORK, MOVE, MOVE], newName,
-                     {memory: {role: "waller"} as CreepMemory});
+    spawn.spawnCreep(bestWorkerParts, newName, {memory: {role: "waller"} as CreepMemory});
   } else if (attackers.length < 6) {
     const newName = "Attacker" + Game.time;
     console.log("Spawning new attacker: " + newName);
-    spawn.spawnCreep([ATTACK, ATTACK, ATTACK, MOVE, MOVE, MOVE], newName,
-                     {memory: {role: "attacker", flagId: "AttackFlag"} as CreepMemory});
+    const creepOptions = {memory: {role: "attacker", flagId: "AttackFlag"} as CreepMemory};
+    spawn.spawnCreep(bestAttackerParts, newName, creepOptions);
   }
 
   for (const name in Game.creeps) {
