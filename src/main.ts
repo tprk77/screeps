@@ -114,6 +114,24 @@ export function arrangeParts(partTemplate: BodyPartConstant[],
 }
 
 /**
+ * Finds the best body possible for the given cost.
+ * @param energy The energy budget. The cost of all parts shall not exceed this number.
+ * @param partTemplate The array of unique parts, determining the order of the result.
+ * @param partGroups Any number of part groups to collect into the result. Each group is added to
+ * the result as a single unit. The groups are added in reverse order. The first group may be
+ * repeated in the result, according to the option.
+ * @param repeatGroup If true, repeat the first group if possible. True by default.
+ * @param minGroup If true, always return at least the last group, even if the cost of this group is
+ * greater than the energy budget. (Don't return an empty result.) True by default.
+ * @return The array of parts.
+ */
+export function getBestPartsForEnergy(energy: number, partTemplate: BodyPartConstant[],
+                                      partGroups: BodyPartConstant[][], repeatGroup: boolean = true,
+                                      minGroup = true): BodyPartConstant[] {
+  return arrangeParts(partTemplate, getPartsForEnergy(energy, partGroups, repeatGroup, minGroup));
+}
+
+/**
  * The main loop!
  */
 export function loop() {
