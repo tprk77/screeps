@@ -91,6 +91,29 @@ export function getPartsForEnergy(energy: number, partGroups: BodyPartConstant[]
 }
 
 /**
+ * Arrange parts according to a template.
+ * @param partTemplate The array of unique parts, determining the order of the result.
+ * @param jumbledParts The parts to reorder according to the template.
+ * @return The reordered parts.
+ */
+export function arrangeParts(partTemplate: BodyPartConstant[],
+                             jumbledParts: BodyPartConstant[]): BodyPartConstant[] {
+  const parts: BodyPartConstant[] = [];
+  const partGroupings = _.groupBy(jumbledParts, _.identity);
+  // Add the parts in the template
+  for (const part of partTemplate) {
+    parts.push(...partGroupings[part]);
+    delete partGroupings[part];
+  }
+  // Add the parts not in the template
+  const preParts: BodyPartConstant[] = [];
+  for (const part in partGroupings) {
+    preParts.push(...partGroupings[part]);
+  }
+  return preParts.concat(parts);
+}
+
+/**
  * The main loop!
  */
 export function loop() {
