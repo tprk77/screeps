@@ -1,11 +1,12 @@
 // Copyright (c) 2018 Tim Perkins
 
-import {Attacker} from "./roles/attacker";
-import {Builder} from "./roles/builder";
-import {Harvester} from "./roles/harvester";
-import {Tower} from "./roles/tower";
-import {Upgrader} from "./roles/upgrader";
-import {Waller} from "./roles/waller";
+import {Attacker} from "./creeps/attacker";
+import {Builder} from "./creeps/builder";
+import {Harvester} from "./creeps/harvester";
+import {Upgrader} from "./creeps/upgrader";
+import {Waller} from "./creeps/waller";
+
+import {Tower} from "./towers/tower";
 
 declare global {
   interface CreepMemory {
