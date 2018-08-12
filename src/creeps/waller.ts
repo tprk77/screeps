@@ -1,5 +1,6 @@
 // Copyright (c) 2018 Tim Perkins
 
+import {Build} from "./tasks/build";
 import {Deposit} from "./tasks/deposit";
 import {Harvest} from "./tasks/harvest";
 import {Pickup} from "./tasks/pickup";
@@ -26,8 +27,10 @@ export class Waller {
     }
     if (creep.memory.walling) {
       if (!Wall.run(creep)) {
-        if (!Deposit.run(creep)) {
-          Upgrade.run(creep);
+        if (!Build.run(creep)) {
+          if (!Deposit.run(creep)) {
+            Upgrade.run(creep);
+          }
         }
       }
     } else {
