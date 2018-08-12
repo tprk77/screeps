@@ -7,12 +7,6 @@ import {Pickup} from "./tasks/pickup";
 import {Upgrade} from "./tasks/upgrade";
 import {Wall} from "./tasks/wall";
 
-declare global {
-  interface CreepMemory {
-    walling: boolean;
-  }
-}
-
 export class Waller {
   public static WALL_GROUP_HITS = [1000, 5000, 10000, 50000, 100000];
   public static WALL_MAX_HITS = _.last(Waller.WALL_GROUP_HITS);

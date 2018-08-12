@@ -4,12 +4,6 @@ import {Harvest} from "./tasks/harvest";
 import {Pickup} from "./tasks/pickup";
 import {Upgrade} from "./tasks/upgrade";
 
-declare global {
-  interface CreepMemory {
-    upgrading: boolean;
-  }
-}
-
 export class Upgrader {
   public static run(creep: Creep): void {
     if (creep.memory.upgrading && creep.carry.energy === 0) {
