@@ -3,6 +3,7 @@
 declare interface CreepMemory {
   // General memory
   role: string;
+  sourceIndex?: number;
 
   // Harvester memory
   harvesting: boolean;

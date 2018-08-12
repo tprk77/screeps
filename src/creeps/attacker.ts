@@ -20,7 +20,9 @@ export class Attacker {
             creep.moveTo(closestHostile);
           }
         } else {
-          const closestStructure = creep.pos.findClosestByRange(FIND_HOSTILE_STRUCTURES);
+          const closestStructure = creep.pos.findClosestByRange(FIND_HOSTILE_STRUCTURES, {
+            filter: (structure) => structure.structureType !== STRUCTURE_CONTROLLER,
+          });
           if (closestStructure) {
             if (creep.attack(closestStructure) === ERR_NOT_IN_RANGE) {
               creep.moveTo(closestStructure);

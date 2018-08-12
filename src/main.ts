@@ -194,7 +194,11 @@ export function loop() {
   const bestAttackerParts = getBestPartsForEnergy(
       spawnEnergy.energy,
       [TOUGH, ATTACK, MOVE],
-      [[TOUGH, TOUGH, TOUGH, MOVE, MOVE, MOVE], [ATTACK, ATTACK, ATTACK, MOVE, MOVE, MOVE]],
+      [
+        [TOUGH, TOUGH, TOUGH, MOVE, MOVE, MOVE],
+        [ATTACK, ATTACK, MOVE, MOVE],
+        [ATTACK, MOVE],
+      ],
       false,
   );
 
