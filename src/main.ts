@@ -8,12 +8,6 @@ import {Waller} from "./creeps/waller";
 
 import {Tower} from "./towers/tower";
 
-declare global {
-  interface CreepMemory {
-    role: string;
-  }
-}
-
 /**
  * Get the total cost of some parts.
  * @param parts The parts to get the cost of.
@@ -223,7 +217,7 @@ export function loop() {
   } else if (attackers.length < 6) {
     const newName = "Attacker" + Game.time;
     console.log("Spawning new attacker: " + newName);
-    const creepOptions = {memory: {role: "attacker", flagId: "AttackFlag"} as CreepMemory};
+    const creepOptions = {memory: {role: "attacker", attackFlagName: "AttackFlag"} as CreepMemory};
     spawn.spawnCreep(bestAttackerParts, newName, creepOptions);
   }
 

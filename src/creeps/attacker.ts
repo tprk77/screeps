@@ -1,16 +1,10 @@
 // Copyright (c) 2018 Tim Perkins
 
-declare global {
-  interface CreepMemory {
-    flagId: string;
-  }
-}
-
 export class Attacker {
   public static NEARBY_ATTACK_RANGE = 5;
 
   public static run(creep: Creep): void {
-    const flag = Game.flags[creep.memory.flagId];
+    const flag = Game.flags[creep.memory.attackFlagName];
     // Always attack nearby hostiles
     const closestHostile = creep.pos.findClosestByRange(FIND_HOSTILE_CREEPS);
     if (closestHostile && creep.pos.inRangeTo(closestHostile, Attacker.NEARBY_ATTACK_RANGE)) {
