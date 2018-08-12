@@ -6,7 +6,8 @@ export class Wall {
 
   public static run(creep: Creep): boolean {
     const wallSites = creep.room.find(FIND_CONSTRUCTION_SITES, {
-      filter: (structure) => structure.structureType === STRUCTURE_WALL,
+      filter: (structure) => (structure.structureType === STRUCTURE_WALL
+                              || structure.structureType === STRUCTURE_RAMPART),
     });
     if (wallSites.length) {
       if (creep.build(wallSites[0]) === ERR_NOT_IN_RANGE) {
@@ -15,8 +16,9 @@ export class Wall {
       return true;
     } else {
       const walls = creep.room.find(FIND_STRUCTURES, {
-        filter: (structure) =>
-            structure.structureType === STRUCTURE_WALL && structure.hits < Wall.WALL_MAX_HITS,
+        filter: (structure) => ((structure.structureType === STRUCTURE_WALL
+                                 || structure.structureType === STRUCTURE_RAMPART)
+                                && structure.hits < Wall.WALL_MAX_HITS),
       });
       const wallGroups = _.groupBy(walls, (wall) => {
         return _.find(Wall.WALL_GROUP_HITS, (groupHits) => wall.hits < groupHits);
