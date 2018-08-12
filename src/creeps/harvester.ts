@@ -1,5 +1,10 @@
 // Copyright (c) 2018 Tim Perkins
 
+import {Deposit} from "./tasks/deposit";
+import {Harvest} from "./tasks/harvest";
+import {Pickup} from "./tasks/pickup";
+import {Upgrade} from "./tasks/upgrade";
+
 declare global {
   interface CreepMemory {
     harvesting: boolean;
@@ -16,21 +21,12 @@ export class Harvester {
       creep.say("Deposit");
     }
     if (!creep.memory.harvesting) {
-      const consumers = creep.room.find(FIND_STRUCTURES, {
-        filter: (structure) => ((structure.structureType === STRUCTURE_EXTENSION
-                                 || structure.structureType === STRUCTURE_SPAWN
-                                 || structure.structureType === STRUCTURE_TOWER)
-                                && structure.energy < structure.energyCapacity),
-      });
-      if (consumers.length) {
-        if (creep.transfer(consumers[0], RESOURCE_ENERGY) === ERR_NOT_IN_RANGE) {
-          creep.moveTo(consumers[0], {visualizePathStyle: {stroke: "#ffffff"}});
-        }
+      if (!Deposit.run(creep)) {
+        Upgrade.run(creep);
       }
     } else {
-      const sources = creep.room.find(FIND_SOURCES);
-      if (creep.harvest(sources[1]) === ERR_NOT_IN_RANGE) {
-        creep.moveTo(sources[1], {visualizePathStyle: {stroke: "#ffaa00"}});
+      if (!Pickup.run(creep)) {
+        Harvest.run(creep);
       }
     }
   }

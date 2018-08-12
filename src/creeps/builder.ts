@@ -1,5 +1,11 @@
 // Copyright (c) 2018 Tim Perkins
 
+import {Build} from "./tasks/build";
+import {Deposit} from "./tasks/deposit";
+import {Harvest} from "./tasks/harvest";
+import {Pickup} from "./tasks/pickup";
+import {Upgrade} from "./tasks/upgrade";
+
 declare global {
   interface CreepMemory {
     building: boolean;
@@ -16,16 +22,14 @@ export class Builder {
       creep.say("Build");
     }
     if (creep.memory.building) {
-      const sites = creep.room.find(FIND_CONSTRUCTION_SITES);
-      if (sites.length) {
-        if (creep.build(sites[0]) === ERR_NOT_IN_RANGE) {
-          creep.moveTo(sites[0], {visualizePathStyle: {stroke: "#ffffff"}});
+      if (!Build.run(creep)) {
+        if (!Deposit.run(creep)) {
+          Upgrade.run(creep);
         }
       }
     } else {
-      const sources = creep.room.find(FIND_SOURCES);
-      if (creep.harvest(sources[1]) === ERR_NOT_IN_RANGE) {
-        creep.moveTo(sources[1], {visualizePathStyle: {stroke: "#ffaa00"}});
+      if (!Pickup.run(creep)) {
+        Harvest.run(creep);
       }
     }
   }
