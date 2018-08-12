@@ -11,4 +11,5 @@ JavaScriptWrapImports: true
 AllowShortCaseLabelsOnASingleLine: true
 AllowShortIfStatementsOnASingleLine: true
 AllowShortLoopsOnASingleLine: true
+AllowShortFunctionsOnASingleLine: Empty
 ...
