@@ -9,7 +9,7 @@
   "main": "dist/main.js",
   "scripts": {
     "lint": "tslint -p tsconfig.json \"src/**/*.ts\"",
-    "format": "clang-format -i src/*.ts src/**/*.ts",
+    "format": "clang-format -i src/*.ts src/**/*.ts src/**/**/*.ts",
     "build": "rollup -c",
     "upload": "rollup -c --environment DEST:main",
     "uploadw": "rollup -cw --environment DEST:main",
