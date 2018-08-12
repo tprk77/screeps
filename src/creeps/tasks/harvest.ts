@@ -2,7 +2,9 @@
 
 export class Harvest {
   public static run(creep: Creep): boolean {
-    const source = Harvest.pickSource(creep, creep.room.find(FIND_SOURCES));
+    const sources = creep.room.find(FIND_SOURCES);
+    const source = (creep.memory.sourceIndex != null) ? sources[creep.memory.sourceIndex]
+                                                      : Harvest.pickSource(creep, sources);
     if (source) {
       if (creep.harvest(source) === ERR_NOT_IN_RANGE) {
         creep.moveTo(source, {visualizePathStyle: {stroke: "#ffaa00"}});
