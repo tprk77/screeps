@@ -10,9 +10,6 @@ import {Wall} from "./tasks/wall";
 import * as Utils from "./utils";
 
 export class Waller {
-  public static WALL_GROUP_HITS = [1000, 5000, 10000, 50000, 100000];
-  public static WALL_MAX_HITS = _.last(Waller.WALL_GROUP_HITS);
-
   public static run(creep: Creep): void {
     if (creep.memory.walling && creep.carry.energy === 0) {
       creep.memory.walling = false;
