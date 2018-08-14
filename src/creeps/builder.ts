@@ -2,9 +2,11 @@
 
 import {Build} from "./tasks/build";
 import {Deposit} from "./tasks/deposit";
+import {GraveDig} from "./tasks/gravedig";
 import {Harvest} from "./tasks/harvest";
 import {Pickup} from "./tasks/pickup";
 import {Upgrade} from "./tasks/upgrade";
+import * as Utils from "./utils";
 
 export class Builder {
   public static run(creep: Creep): void {
@@ -16,15 +18,19 @@ export class Builder {
       creep.say("Build");
     }
     if (creep.memory.building) {
-      if (!Build.run(creep)) {
-        if (!Deposit.run(creep)) {
-          Upgrade.run(creep);
-        }
-      }
+      Utils.runTasks(creep, [
+        GraveDig,
+        Pickup,
+        Build,
+        Deposit,
+        Upgrade,
+      ]);
     } else {
-      if (!Pickup.run(creep)) {
-        Harvest.run(creep);
-      }
+      Utils.runTasks(creep, [
+        GraveDig,
+        Pickup,
+        Harvest,
+      ]);
     }
   }
 }
