@@ -2,6 +2,9 @@
 
 export class Build {
   public static run(creep: Creep): boolean {
+    if (_.get(creep.room.controller, "my", false)) {
+      return false;
+    }
     const sites = creep.room.find(FIND_CONSTRUCTION_SITES);
     if (sites.length) {
       if (creep.build(sites[0]) === ERR_NOT_IN_RANGE) {

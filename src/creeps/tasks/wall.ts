@@ -5,6 +5,9 @@ export class Wall {
   public static readonly WALL_MAX_HITS = _.last(Wall.WALL_GROUP_HITS);
 
   public static run(creep: Creep): boolean {
+    if (_.get(creep.room.controller, "my", false)) {
+      return false;
+    }
     const wallSites = creep.room.find(FIND_CONSTRUCTION_SITES, {
       filter: (structure) => (structure.structureType === STRUCTURE_WALL
                               || structure.structureType === STRUCTURE_RAMPART),

@@ -2,6 +2,9 @@
 
 export class Deposit {
   public static run(creep: Creep): boolean {
+    if (_.get(creep.room.controller, "my", false)) {
+      return false;
+    }
     const consumers = creep.room.find(FIND_STRUCTURES, {
       filter: (structure) => ((structure.structureType === STRUCTURE_EXTENSION
                                || structure.structureType === STRUCTURE_SPAWN

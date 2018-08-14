@@ -3,7 +3,7 @@
 export class Upgrade {
   public static run(creep: Creep): boolean {
     const controller = creep.room.controller;
-    if (controller) {
+    if (controller && controller.my) {
       if (creep.upgradeController(controller) === ERR_NOT_IN_RANGE) {
         creep.moveTo(controller, {visualizePathStyle: {stroke: "#ffffff"}});
       }
