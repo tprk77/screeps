@@ -1,7 +1,7 @@
 // Copyright (c) 2018 Tim Perkins
 
 export class Tower {
-  public static RESERVE_ENERGY = 500;
+  public static readonly RESERVE_ENERGY = 500;
 
   public static run(tower: StructureTower): void {
     const closestHostile = tower.pos.findClosestByRange(FIND_HOSTILE_CREEPS);

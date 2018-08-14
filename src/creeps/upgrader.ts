@@ -1,8 +1,10 @@
 // Copyright (c) 2018 Tim Perkins
 
+import {GraveDig} from "./tasks/gravedig";
 import {Harvest} from "./tasks/harvest";
 import {Pickup} from "./tasks/pickup";
 import {Upgrade} from "./tasks/upgrade";
+import * as Utils from "./utils";
 
 export class Upgrader {
   public static run(creep: Creep): void {
@@ -14,11 +16,17 @@ export class Upgrader {
       creep.say("Upgrade");
     }
     if (creep.memory.upgrading) {
-      Upgrade.run(creep);
+      Utils.runTasks(creep, [
+        GraveDig,
+        Pickup,
+        Upgrade,
+      ]);
     } else {
-      if (!Pickup.run(creep)) {
-        Harvest.run(creep);
-      }
+      Utils.runTasks(creep, [
+        GraveDig,
+        Pickup,
+        Harvest,
+      ]);
     }
   }
 }

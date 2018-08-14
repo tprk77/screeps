@@ -1,7 +1,7 @@
 // Copyright (c) 2018 Tim Perkins
 
 export class Attacker {
-  public static NEARBY_ATTACK_RANGE = 5;
+  public static readonly NEARBY_ATTACK_RANGE = 5;
 
   public static run(creep: Creep): void {
     const flag = Game.flags[creep.memory.attackFlagName];

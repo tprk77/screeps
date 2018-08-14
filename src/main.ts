@@ -206,11 +206,11 @@ export function loop() {
     const newName = "Harvester" + Game.time;
     console.log("Spawning new harvester: " + newName);
     spawn.spawnCreep(bestWorkerParts, newName, {memory: {role: "harvester"} as CreepMemory});
-  } else if (builders.length < 4) {
+  } else if (builders.length < 2) {
     const newName = "Builder" + Game.time;
     console.log("Spawning new builder: " + newName);
     spawn.spawnCreep(bestWorkerParts, newName, {memory: {role: "builder"} as CreepMemory});
-  } else if (upgraders.length < 6) {
+  } else if (upgraders.length < 4) {
     const newName = "Upgrader" + Game.time;
     console.log("Spawning new upgrader: " + newName);
     spawn.spawnCreep(bestWorkerParts, newName, {memory: {role: "upgrader"} as CreepMemory});
