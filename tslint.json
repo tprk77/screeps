@@ -37,6 +37,10 @@
     ],
     "trailing-comma": [
       false
+    ],
+    "array-type": [
+      true,
+      "array"
     ]
   }
 }
