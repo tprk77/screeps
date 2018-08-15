@@ -2,6 +2,7 @@
 
 import {Attacker} from "./creeps/attacker";
 import {Builder} from "./creeps/builder";
+import {Claimer} from "./creeps/claimer";
 import {Harvester} from "./creeps/harvester";
 import {Upgrader} from "./creeps/upgrader";
 import {Waller} from "./creeps/waller";
@@ -181,6 +182,7 @@ export function loop() {
   const upgraders = _.filter(Game.creeps, (creep) => creep.memory.role === "upgrader");
   const wallers = _.filter(Game.creeps, (creep) => creep.memory.role === "waller");
   const attackers = _.filter(Game.creeps, (creep) => creep.memory.role === "attacker");
+  const claimers = _.filter(Game.creeps, (creep) => creep.memory.role === "claimer");
 
   const spawn = Game.spawns.Spawn1;
   const spawnEnergy = getSpawnEnergy(spawn.room);
@@ -200,6 +202,12 @@ export function loop() {
         [ATTACK, MOVE],
       ],
       false,
+  );
+
+  const bestClaimerParts = getBestPartsForEnergy(
+      spawnEnergy.energy,
+      [CLAIM, MOVE],
+      [[CLAIM, MOVE]],
   );
 
   if (harvesters.length < 4) {
@@ -223,6 +231,11 @@ export function loop() {
     console.log("Spawning new attacker: " + newName);
     const creepOptions = {memory: {role: "attacker", attackFlagName: "AttackFlag"} as CreepMemory};
     spawn.spawnCreep(bestAttackerParts, newName, creepOptions);
+  } else if (claimers.length < 1) {
+    const newName = "Claimer" + Game.time;
+    console.log("Spawning new claimer: " + newName);
+    const creepOptions = {memory: {role: "claimer", claimFlagName: "ClaimFlag"} as CreepMemory};
+    spawn.spawnCreep(bestClaimerParts, newName, creepOptions);
   }
 
   for (const name in Game.creeps) {
@@ -237,6 +250,8 @@ export function loop() {
       Waller.run(creep);
     } else if (creep.memory.role === "attacker") {
       Attacker.run(creep);
+    } else if (creep.memory.role === "claimer") {
+      Claimer.run(creep);
     }
   }
 }

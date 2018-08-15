@@ -37,6 +37,13 @@
     ],
     "trailing-comma": [
       false
+    ],
+    "array-type": [
+      true,
+      "array"
+    ],
+    "max-classes-per-file": [
+      false
     ]
   }
 }
