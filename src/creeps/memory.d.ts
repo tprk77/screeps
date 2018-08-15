@@ -19,4 +19,7 @@ declare interface CreepMemory {
 
   // Attacker memory
   attackFlagName: string;
+
+  // Claimer memory
+  claimFlagName: string;
 }
