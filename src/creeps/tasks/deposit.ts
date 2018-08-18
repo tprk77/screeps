@@ -12,8 +12,9 @@ export class Deposit {
                               && structure.energy < structure.energyCapacity),
     });
     if (consumers.length) {
-      if (creep.transfer(consumers[0], RESOURCE_ENERGY) === ERR_NOT_IN_RANGE) {
-        creep.moveTo(consumers[0], {visualizePathStyle: {stroke: "#ffffff"}});
+      const consumer = consumers[0];
+      if (creep.transfer(consumer, RESOURCE_ENERGY) === ERR_NOT_IN_RANGE) {
+        creep.moveTo(consumer, {visualizePathStyle: {stroke: "#ffffff"}});
       }
       return true;
     } else {

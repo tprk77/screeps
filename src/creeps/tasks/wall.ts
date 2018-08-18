@@ -13,8 +13,9 @@ export class Wall {
                               || structure.structureType === STRUCTURE_RAMPART),
     });
     if (wallSites.length) {
-      if (creep.build(wallSites[0]) === ERR_NOT_IN_RANGE) {
-        creep.moveTo(wallSites[0], {visualizePathStyle: {stroke: "#ffffff"}});
+      const wallSite = wallSites[0];
+      if (creep.build(wallSite) === ERR_NOT_IN_RANGE) {
+        creep.moveTo(wallSite, {visualizePathStyle: {stroke: "#ffffff"}});
       }
       return true;
     } else {
