@@ -8,6 +8,7 @@ import {Pickup} from "./tasks/pickup";
 import {Return} from "./tasks/return";
 import {Upgrade} from "./tasks/upgrade";
 import {Wall} from "./tasks/wall";
+import {Withdraw} from "./tasks/withdraw";
 import * as Utils from "./utils";
 
 export class Waller {
@@ -33,6 +34,7 @@ export class Waller {
       Utils.runTasks(creep, [
         GraveDig,
         Pickup,
+        Withdraw,
         Harvest,
       ]);
     }

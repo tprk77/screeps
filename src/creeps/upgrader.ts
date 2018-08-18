@@ -4,6 +4,7 @@ import {GraveDig} from "./tasks/gravedig";
 import {Harvest} from "./tasks/harvest";
 import {Pickup} from "./tasks/pickup";
 import {Upgrade} from "./tasks/upgrade";
+import {Withdraw} from "./tasks/withdraw";
 import * as Utils from "./utils";
 
 export class Upgrader {
@@ -25,6 +26,7 @@ export class Upgrader {
       Utils.runTasks(creep, [
         GraveDig,
         Pickup,
+        Withdraw,
         Harvest,
       ]);
     }
