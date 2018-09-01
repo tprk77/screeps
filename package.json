@@ -13,6 +13,7 @@
     "build": "rollup -c",
     "upload": "rollup -c --environment DEST:main",
     "uploadw": "rollup -cw --environment DEST:main",
+    "doc": "typedoc --out doc src",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "devDependencies": {
@@ -26,6 +27,7 @@
     "rollup-plugin-screeps": "^0.1.2",
     "rollup-plugin-typescript2": "^0.16.1",
     "tslint": "^5.11.0",
+    "typedoc": "^0.12.0",
     "typescript": "^2.9.2"
   }
 }
