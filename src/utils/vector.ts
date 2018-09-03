@@ -95,6 +95,18 @@ export class Vector {
   }
 
   /**
+   * Determine if this vector and another vector are equal.
+   *
+   * @param vector The other vector.
+   * @param epsilon Consider components equal if their difference is less than this amount.
+   * @return True if the vectors are equal, false otherwise.
+   */
+  public equals(vector: Vector, epsilon: number = 1.0E-6): boolean {
+    return (this === vector
+            || (Math.abs(this.x - vector.x) < epsilon && Math.abs(this.y - vector.y) < epsilon));
+  }
+
+  /**
    * Add a vector to this vector.
    *
    * @param vector The vector to add to this vector.
