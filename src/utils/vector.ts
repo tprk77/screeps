@@ -331,6 +331,8 @@ export class Vector {
   /**
    * Expel the vector from the given circular region.
    *
+   * If this vector is equal to the center of the circle, the vector is expelled at a random angle.
+   *
    * @param minCorner The min corner.
    * @param maxCorner The max corner.
    * @return The expelled vector.
@@ -339,8 +341,13 @@ export class Vector {
     if (this.squaredDistanceTo(center) >= radius * radius) {
       return this.copy();
     } else {
-      const angle = this.subtract(center).angle();
-      return center.add(new Vector(radius, 0.0).rotate(angle));
+      if (this.equals(center)) {
+        const angle = 2 * Math.PI * Math.random();
+        return center.add(new Vector(radius, 0.0).rotate(angle));
+      } else {
+        const angle = this.subtract(center).angle();
+        return center.add(new Vector(radius, 0.0).rotate(angle));
+      }
     }
   }
 
