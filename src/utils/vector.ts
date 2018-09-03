@@ -57,6 +57,31 @@ export class Vector {
   }
 
   /**
+   * Create a new vector from an object with X and Y.
+   *
+   * @param obj The object to convert.
+   * @return The new vector.
+   */
+  public static fromObject(obj: {x: number, y: number}): Vector {
+    return new Vector(obj.x, obj.y);
+  }
+
+  /**
+   * Create a new vector from an array with two elements.
+   *
+   * The first element corresponds to the X component. The second element corresponds to the Y
+   * component. If the array is too short, then `NaN` will be used for the missing components.
+   *
+   * @param obj The object to convert.
+   * @return The new vector.
+   */
+  public static fromArray(array: number[]): Vector {
+    const x = array[0] != null ? array[0] : NaN;
+    const y = array[1] != null ? array[1] : NaN;
+    return new Vector(x, y);
+  }
+
+  /**
    * Get a random vector between a min and max corner.
    *
    * @param minCorner The min corner (inclusive).
