@@ -276,6 +276,22 @@ export class Vector {
   }
 
   /**
+   * Clamp the vector to the given circular region.
+   *
+   * @param center The center of the circle.
+   * @param radius The radius of the circle.
+   * @return The clamped vector.
+   */
+  public clampRadius(center: Vector, radius: number): Vector {
+    if (this.squaredDistanceTo(center) <= radius * radius) {
+      return this.copy();
+    } else {
+      const angle = this.subtract(center).angle();
+      return center.add(new Vector(radius, 0.0).rotate(angle));
+    }
+  }
+
+  /**
    * Expel the vector from the given rectangular region.
    *
    * Moves the vector to the closest egde. If the vector is equidistant to two or more edges, the
@@ -297,6 +313,22 @@ export class Vector {
           (vector) => vector.squaredMagnitude(),
       );
       return this.add(adjust);
+    }
+  }
+
+  /**
+   * Expel the vector from the given circular region.
+   *
+   * @param minCorner The min corner.
+   * @param maxCorner The max corner.
+   * @return The expelled vector.
+   */
+  public expelRadius(center: Vector, radius: number): Vector {
+    if (this.squaredDistanceTo(center) >= radius * radius) {
+      return this.copy();
+    } else {
+      const angle = this.subtract(center).angle();
+      return center.add(new Vector(radius, 0.0).rotate(angle));
     }
   }
 
