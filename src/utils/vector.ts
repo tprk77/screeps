@@ -251,6 +251,31 @@ export class Vector {
   }
 
   /**
+   * Expel the vector from the given rectangular region.
+   *
+   * Moves the vector to the closest egde. If the vector is equidistant to two or more edges, the
+   * edge it will be moved to is unspecified.
+   *
+   * @param minCorner The min corner.
+   * @param maxCorner The max corner.
+   * @return The expelled vector.
+   */
+  public expel(minCorner: Vector, maxCorner: Vector): Vector {
+    if ((this.x <= minCorner.x || maxCorner.x <= this.x)
+        || (this.y <= minCorner.y || maxCorner.y <= this.y)) {
+      return this.copy();
+    } else {
+      const deltaMin = minCorner.subtract(this).decompose();
+      const deltaMax = maxCorner.subtract(this).decompose();
+      const adjust = _.min(
+          [deltaMin.x, deltaMin.y, deltaMax.x, deltaMax.y],
+          (vector) => vector.squaredMagnitude(),
+      );
+      return this.add(adjust);
+    }
+  }
+
+  /**
    * Test if either vector component is `NaN`.
    *
    * @return True if either vector component is `NaN`, false otherwise.
