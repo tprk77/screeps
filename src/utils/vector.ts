@@ -229,6 +229,15 @@ export class Vector {
   }
 
   /**
+   * Decompose this vector into orthogonal X and Y vectors.
+   *
+   * @return The orthogonal X and Y vectors.
+   */
+  public decompose(): {x: Vector, y: Vector} {
+    return {x: this.copy({y: 0.0}), y: this.copy({x: 0.0})};
+  }
+
+  /**
    * Clamp the vector to the given rectangular region.
    *
    * @param minCorner The min corner.
