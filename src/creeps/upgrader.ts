@@ -2,7 +2,7 @@
 
 import {GraveDig} from "./tasks/gravedig";
 import {Harvest} from "./tasks/harvest";
-import {MoveFromSource} from "./tasks/movefromsource";
+import {MoveFromMinerSource, MoveFromSource} from "./tasks/movefromsource";
 import {Pickup} from "./tasks/pickup";
 import {Upgrade} from "./tasks/upgrade";
 import {Withdraw} from "./tasks/withdraw";
@@ -25,12 +25,14 @@ export class Upgrader {
         GraveDig,
         Pickup,
         MoveFromSource,
+        MoveFromMinerSource,
         Upgrade,
       ]);
     } else {
       Utils.runTasks(creep, [
         GraveDig,
         Pickup,
+        MoveFromMinerSource,
         Withdraw,
         Harvest,
       ]);

@@ -20,7 +20,7 @@ export class Harvest {
    * that great at doing a good distribution, and doesn't consider source proximity.
    */
   private static pickSource(creep: Creep, sources: Source[]): Source|null {
-    if (creep.id && sources.length) {
+    if (!creep.spawning && sources.length) {
       const sourceIndex = _.last(creep.id).charCodeAt(0) % sources.length;
       return sources[sourceIndex];
     } else {
