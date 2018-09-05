@@ -4,6 +4,7 @@ import {Attacker} from "./creeps/attacker";
 import {Builder} from "./creeps/builder";
 import {Claimer} from "./creeps/claimer";
 import {Harvester} from "./creeps/harvester";
+import {Miner} from "./creeps/miner";
 import {Upgrader} from "./creeps/upgrader";
 import {Waller} from "./creeps/waller";
 
@@ -178,6 +179,7 @@ export function loop() {
   }
 
   const harvesters = _.filter(Game.creeps, (creep) => creep.memory.role === "harvester");
+  const miners = _.filter(Game.creeps, (creep) => creep.memory.role === "miner");
   const builders = _.filter(Game.creeps, (creep) => creep.memory.role === "builder");
   const upgraders = _.filter(Game.creeps, (creep) => creep.memory.role === "upgrader");
   const wallers = _.filter(Game.creeps, (creep) => creep.memory.role === "waller");
@@ -191,6 +193,12 @@ export function loop() {
       spawnEnergy.energy,
       [CARRY, WORK, MOVE],
       [[CARRY, WORK, MOVE]],
+  );
+
+  const bestMinerParts = getBestPartsForEnergy(
+      Math.max(spawnEnergy.energy, 0.75 * spawnEnergy.energyCapacity),
+      [WORK, CARRY, MOVE],
+      [[WORK], [WORK, CARRY, MOVE]],
   );
 
   const bestAttackerParts = getBestPartsForEnergy(
@@ -214,6 +222,10 @@ export function loop() {
     const newName = "Harvester" + Game.time;
     console.log("Spawning new harvester: " + newName);
     spawn.spawnCreep(bestWorkerParts, newName, {memory: {role: "harvester"} as CreepMemory});
+  } else if (_.get(spawn.room.controller, "level", 0) >= 3 && miners.length < 2) {
+    const newName = "Miner" + Game.time;
+    console.log("Spawning new miner: " + newName);
+    spawn.spawnCreep(bestMinerParts, newName, {memory: {role: "miner"} as CreepMemory});
   } else if (builders.length < 2) {
     const newName = "Builder" + Game.time;
     console.log("Spawning new builder: " + newName);
@@ -242,6 +254,8 @@ export function loop() {
     const creep = Game.creeps[name];
     if (creep.memory.role === "harvester") {
       Harvester.run(creep);
+    } else if (creep.memory.role === "miner") {
+      Miner.run(creep);
     } else if (creep.memory.role === "builder") {
       Builder.run(creep);
     } else if (creep.memory.role === "upgrader") {
