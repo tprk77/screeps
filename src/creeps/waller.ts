@@ -13,10 +13,13 @@ import * as Utils from "./utils";
 
 export class Waller {
   public static run(creep: Creep): void {
+    const fullEnergyThreshold = Utils.getOrSetMemory(creep, "fullEnergyThreshold", () => {
+      return Utils.getNoDropEnergyThreshold(creep);
+    });
     if (creep.memory.walling && creep.carry.energy === 0) {
       creep.memory.walling = false;
       creep.say("Harvest");
-    } else if (!creep.memory.walling && creep.carry.energy === creep.carryCapacity) {
+    } else if (!creep.memory.walling && creep.carry.energy >= fullEnergyThreshold) {
       creep.memory.walling = true;
       creep.say("Walling");
     }

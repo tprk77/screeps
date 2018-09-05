@@ -9,10 +9,13 @@ import * as Utils from "./utils";
 
 export class Upgrader {
   public static run(creep: Creep): void {
+    const fullEnergyThreshold = Utils.getOrSetMemory(creep, "fullEnergyThreshold", () => {
+      return Utils.getNoDropEnergyThreshold(creep);
+    });
     if (creep.memory.upgrading && creep.carry.energy === 0) {
       creep.memory.upgrading = false;
       creep.say("Harvest");
-    } else if (!creep.memory.upgrading && creep.carry.energy === creep.carryCapacity) {
+    } else if (!creep.memory.upgrading && creep.carry.energy >= fullEnergyThreshold) {
       creep.memory.upgrading = true;
       creep.say("Upgrade");
     }

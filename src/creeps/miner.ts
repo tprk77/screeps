@@ -16,10 +16,13 @@ export class Miner {
    * of WORK parts, but don't need many CARRY or MOVE parts.
    */
   public static run(creep: Creep): void {
+    const fullEnergyThreshold = Utils.getOrSetMemory(creep, "fullEnergyThreshold", () => {
+      return Utils.getNoDropEnergyThreshold(creep);
+    });
     if (!creep.memory.harvesting && creep.carry.energy === 0) {
       creep.memory.harvesting = true;
       creep.say("Harvest");
-    } else if (creep.memory.harvesting && creep.carry.energy === creep.carryCapacity) {
+    } else if (creep.memory.harvesting && creep.carry.energy >= fullEnergyThreshold) {
       creep.memory.harvesting = false;
       creep.say("Deposit");
     }

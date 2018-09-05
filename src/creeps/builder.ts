@@ -11,10 +11,13 @@ import * as Utils from "./utils";
 
 export class Builder {
   public static run(creep: Creep): void {
+    const fullEnergyThreshold = Utils.getOrSetMemory(creep, "fullEnergyThreshold", () => {
+      return Utils.getNoDropEnergyThreshold(creep);
+    });
     if (creep.memory.building && creep.carry.energy === 0) {
       creep.memory.building = false;
       creep.say("Harvest");
-    } else if (!creep.memory.building && creep.carry.energy === creep.carryCapacity) {
+    } else if (!creep.memory.building && creep.carry.energy >= fullEnergyThreshold) {
       creep.memory.building = true;
       creep.say("Build");
     }
