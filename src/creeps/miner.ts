@@ -1,16 +1,20 @@
 // Copyright (c) 2018 Tim Perkins
 
-import {Build} from "./tasks/build";
-import {Deposit} from "./tasks/deposit";
 import {GraveDig} from "./tasks/gravedig";
 import {Harvest} from "./tasks/harvest";
-import {MoveFromMinerSource, MoveFromSource} from "./tasks/movefromsource";
 import {Pickup} from "./tasks/pickup";
+import {StoreInNearbyContainer} from "./tasks/store";
 import {Upgrade} from "./tasks/upgrade";
 import {Withdraw} from "./tasks/withdraw";
 import * as Utils from "./utils";
 
-export class Harvester {
+export class Miner {
+  /**
+   * Miners are like Harvesters, but instead of distributing their energy all over the room, they
+   * only place their energy in nearby containers. They might hog the spot in front of the source,
+   * but other creeps can just withdraw energy from the container. Miner creeps should have plenty
+   * of WORK parts, but don't need many CARRY or MOVE parts.
+   */
   public static run(creep: Creep): void {
     const fullEnergyThreshold = Utils.getOrSetMemory(creep, "fullEnergyThreshold", () => {
       return Utils.getNoDropEnergyThreshold(creep);
@@ -24,20 +28,10 @@ export class Harvester {
     }
     if (!creep.memory.harvesting) {
       Utils.runTasks(creep, [
-        GraveDig,
-        Pickup,
-        MoveFromSource,
-        MoveFromMinerSource,
-        Deposit,
-        Build,
-        Upgrade,
+        StoreInNearbyContainer,
       ]);
     } else {
       Utils.runTasks(creep, [
-        GraveDig,
-        Pickup,
-        MoveFromMinerSource,
-        Withdraw,
         Harvest,
       ]);
     }

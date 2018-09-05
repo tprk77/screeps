@@ -7,6 +7,7 @@ declare interface CreepMemory {
 
   // Harvester memory
   harvesting: boolean;
+  fullEnergyThreshold: number;
 
   // Upgrader memory
   upgrading: boolean;

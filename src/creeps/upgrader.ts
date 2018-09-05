@@ -2,6 +2,7 @@
 
 import {GraveDig} from "./tasks/gravedig";
 import {Harvest} from "./tasks/harvest";
+import {MoveFromMinerSource, MoveFromSource} from "./tasks/movefromsource";
 import {Pickup} from "./tasks/pickup";
 import {Upgrade} from "./tasks/upgrade";
 import {Withdraw} from "./tasks/withdraw";
@@ -9,10 +10,13 @@ import * as Utils from "./utils";
 
 export class Upgrader {
   public static run(creep: Creep): void {
+    const fullEnergyThreshold = Utils.getOrSetMemory(creep, "fullEnergyThreshold", () => {
+      return Utils.getNoDropEnergyThreshold(creep);
+    });
     if (creep.memory.upgrading && creep.carry.energy === 0) {
       creep.memory.upgrading = false;
       creep.say("Harvest");
-    } else if (!creep.memory.upgrading && creep.carry.energy === creep.carryCapacity) {
+    } else if (!creep.memory.upgrading && creep.carry.energy >= fullEnergyThreshold) {
       creep.memory.upgrading = true;
       creep.say("Upgrade");
     }
@@ -20,12 +24,15 @@ export class Upgrader {
       Utils.runTasks(creep, [
         GraveDig,
         Pickup,
+        MoveFromSource,
+        MoveFromMinerSource,
         Upgrade,
       ]);
     } else {
       Utils.runTasks(creep, [
         GraveDig,
         Pickup,
+        MoveFromMinerSource,
         Withdraw,
         Harvest,
       ]);
