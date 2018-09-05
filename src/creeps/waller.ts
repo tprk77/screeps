@@ -4,6 +4,7 @@ import {Build} from "./tasks/build";
 import {Deposit} from "./tasks/deposit";
 import {GraveDig} from "./tasks/gravedig";
 import {Harvest} from "./tasks/harvest";
+import {MoveFromSource} from "./tasks/movefromsource";
 import {Pickup} from "./tasks/pickup";
 import {Return} from "./tasks/return";
 import {Upgrade} from "./tasks/upgrade";
@@ -27,6 +28,7 @@ export class Waller {
       Utils.runTasks(creep, [
         GraveDig,
         Pickup,
+        MoveFromSource,
         Wall,
         Build,
         Deposit,
