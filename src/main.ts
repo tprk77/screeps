@@ -218,14 +218,27 @@ export function loop() {
       [[CLAIM, MOVE]],
   );
 
-  if (harvesters.length < 4) {
+  if (spawn.spawning) {
+    // Do nothing, wait for the spawn to complete
+  } else if (harvesters.length < 4) {
     const newName = "Harvester" + Game.time;
     console.log("Spawning new harvester: " + newName);
     spawn.spawnCreep(bestWorkerParts, newName, {memory: {role: "harvester"} as CreepMemory});
   } else if (_.get(spawn.room.controller, "level", 0) >= 3 && miners.length < 2) {
-    const newName = "Miner" + Game.time;
-    console.log("Spawning new miner: " + newName);
-    spawn.spawnCreep(bestMinerParts, newName, {memory: {role: "miner"} as CreepMemory});
+    // TODO Replace this code with better creep management
+    const minerOne = Game.creeps.MinerOne;
+    const minerTwo = Game.creeps.MinerTwo;
+    if (!minerOne) {
+      const newName = "MinerOne";
+      console.log("Spawning new miner: " + newName);
+      const creepOptions = {memory: {role: "miner", sourceIndex: 0} as CreepMemory};
+      spawn.spawnCreep(bestMinerParts, newName, creepOptions);
+    } else if (!minerTwo) {
+      const newName = "MinerTwo";
+      console.log("Spawning new miner: " + newName);
+      const creepOptions = {memory: {role: "miner", sourceIndex: 1} as CreepMemory};
+      spawn.spawnCreep(bestMinerParts, newName, creepOptions);
+    }
   } else if (builders.length < 2) {
     const newName = "Builder" + Game.time;
     console.log("Spawning new builder: " + newName);
