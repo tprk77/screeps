@@ -129,35 +129,6 @@ export function getBestPartsForEnergy(energy: number, partTemplate: BodyPartCons
 }
 
 /**
- * Stores the energy and energy capacity for spawning.
- */
-interface SpawnEnergy {
-  energy: number;
-  energyCapacity: number;
-}
-
-/**
- * Get the room's energy and energy capacity for spawning.
- * @param room The room to get the energy of.
- * @return The spawning energy.
- */
-export function getSpawnEnergy(room: Room): SpawnEnergy {
-  const spawnEnergy: SpawnEnergy = {energy: 0, energyCapacity: 0};
-  const spawningStructures = room.find(FIND_STRUCTURES, {
-    filter: (structure) => ((structure.structureType === STRUCTURE_SPAWN
-                             || structure.structureType === STRUCTURE_EXTENSION)
-                            && structure.isActive()),
-  });
-  for (const spawningStructure of spawningStructures) {
-    // Force the type to have energy and energyCapacity
-    const spawnStructure = spawningStructure as StructureSpawn;
-    spawnEnergy.energy += spawnStructure.energy;
-    spawnEnergy.energyCapacity += spawnStructure.energyCapacity;
-  }
-  return spawnEnergy;
-}
-
-/**
  * The main loop!
  */
 export function loop() {
@@ -187,22 +158,21 @@ export function loop() {
   const claimers = _.filter(Game.creeps, (creep) => creep.memory.role === "claimer");
 
   const spawn = Game.spawns.Spawn1;
-  const spawnEnergy = getSpawnEnergy(spawn.room);
 
   const bestWorkerParts = getBestPartsForEnergy(
-      spawnEnergy.energy,
+      spawn.room.energyAvailable,
       [CARRY, WORK, MOVE],
       [[CARRY, WORK, MOVE]],
   );
 
   const bestMinerParts = getBestPartsForEnergy(
-      Math.max(spawnEnergy.energy, 0.75 * spawnEnergy.energyCapacity),
+      Math.max(spawn.room.energyAvailable, 0.75 * spawn.room.energyCapacityAvailable),
       [WORK, CARRY, MOVE],
       [[WORK], [WORK, CARRY, MOVE]],
   );
 
   const bestAttackerParts = getBestPartsForEnergy(
-      spawnEnergy.energy,
+      spawn.room.energyAvailable,
       [TOUGH, ATTACK, MOVE],
       [
         [TOUGH, TOUGH, TOUGH, MOVE, MOVE, MOVE],
@@ -213,7 +183,7 @@ export function loop() {
   );
 
   const bestClaimerParts = getBestPartsForEnergy(
-      spawnEnergy.energy,
+      spawn.room.energyAvailable,
       [CLAIM, MOVE],
       [[CLAIM, MOVE]],
   );
