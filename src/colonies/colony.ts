@@ -28,12 +28,6 @@ export class Colony {
    * @param room The claimed room of the colony.
    */
   public static run(room: Room): void {
-    // TODO REMOVE!
-    if (room.memory.creepIds) {
-      console.log(C(room) + "CLEARING MEMORY!");
-      delete room.memory.creepIds;
-      delete room.memory;
-    }
     // Check to initialize colony memory
     if (!room.memory) {
       Colony.initializeColonyMemory(room);
@@ -73,9 +67,6 @@ export class Colony {
     console.log(C(room) + "Initializing colony memory!");
     if (room.memory.creepNames == null) {
       room.memory.creepNames = [];
-      // TODO REMOVE! JANK CODE!
-      // Using this to transfer all creeps to the only room I have at the moment!
-      room.memory.creepNames = _.map(Game.creeps, (creep) => creep.name);
     }
   }
 
