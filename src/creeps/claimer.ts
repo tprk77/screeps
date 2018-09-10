@@ -1,8 +1,7 @@
 // Copyright (c) 2018 Tim Perkins
 
 import {Claim} from "./tasks/claim";
-import {MoveToFlagRoom} from "./tasks/movetoflag";
-import {Return} from "./tasks/return";
+import {MoveToFlag, MoveToFlagRoom} from "./tasks/movetoflag";
 import * as Utils from "./utils";
 
 export class Claimer {
@@ -11,7 +10,7 @@ export class Claimer {
     Utils.runTasks(creep, [
       MoveToFlagRoom.forFlag(flag),
       Claim,
-      Return,
+      MoveToFlag.forFlag(flag),
     ]);
   }
 }

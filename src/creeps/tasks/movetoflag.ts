@@ -9,7 +9,7 @@ export class MoveToFlag {
     this.flag = flag;
   }
 
-  public static forFlag(flag: Flag): MoveToFlag|null {
+  public static forFlag(flag: Flag|null): MoveToFlag|null {
     return flag ? new MoveToFlag(flag) : null;
   }
 
@@ -31,7 +31,7 @@ export class MoveToFlagRoom {
     this.flag = flag;
   }
 
-  public static forFlag(flag: Flag): MoveToFlagRoom|null {
+  public static forFlag(flag: Flag|null): MoveToFlagRoom|null {
     return flag ? new MoveToFlagRoom(flag) : null;
   }
 

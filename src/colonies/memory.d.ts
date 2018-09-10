@@ -2,6 +2,7 @@
 
 declare interface RoomMemory {
   // Colony creep IDs
+  creepNames: string[];
   creepIds: string[];
 
   // Colony source IDs

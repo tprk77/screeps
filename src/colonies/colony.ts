@@ -10,6 +10,13 @@ import {Waller} from "../creeps/waller";
 import {Tower} from "../towers/tower";
 import * as Utils from "./utils";
 
+/*
+ * Quick logging utilitly to show the colony room.
+ */
+function C(room: Room): string {
+  return "[" + room.name + "] ";
+}
+
 /**
  * A Colony of creeps.
  */
@@ -34,21 +41,16 @@ export class Colony {
       filter: (structure) => structure.structureType === STRUCTURE_TOWER,
     }) as StructureTower[];
     // Get the creeps spawned from this colony, no matter the current room
-    const existingCreeps = _.transform(room.memory.creepIds, (creeps, creepId) => {
-      const creep = Game.getObjectById(creepId) as Creep | null;
+    const creeps = _.transform(room.memory.creepNames, (creeps, creepName) => {
+      const creep = Game.creeps[creepName];
       if (creep) {
         creeps.push(creep);
+      } else {
+        console.log(C(room) + "Creep has died: " + creepName);
       }
     }) as Creep[];
-    // Get newly spawned creeps
-    const newCreeps = room.find(FIND_MY_CREEPS, {
-      // TODO WARNING SLOW!
-      filter: (creep) => !_.includes(existingCreeps, creep),
-    });
-    // Combine new and existing creeps
-    const creeps = newCreeps.concat(existingCreeps);
     // Remove dead creeps from the colony memory
-    room.memory.creepIds = creeps.map((creep) => creep.id);
+    room.memory.creepNames = creeps.map((creep) => creep.name);
     // Run everything in the colony!
     Colony.runSpawns(room, spawns, creeps);
     Colony.runTowers(room, towers);
@@ -62,11 +64,9 @@ export class Colony {
    * @param override Reset the colony's memory.
    */
   private static initializeColonyMemory(room: Room, override: boolean = false): void {
-    if (room.memory.creepIds == null) {
-      room.memory.creepIds = [];
-      // TODO REMOVE! JANK CODE!
-      // Using this to transfer all creeps to the only room I have at the moment!
-      room.memory.creepIds = _.map(Game.creeps, (creep) => creep.id);
+    console.log(C(room) + "Initializing colony memory!");
+    if (room.memory.creepNames == null) {
+      room.memory.creepNames = [];
     }
   }
 
@@ -118,49 +118,77 @@ export class Colony {
     const numAttackers = _.filter(creeps, (creep) => creep.memory.role === "attacker").length;
     const numClaimers = _.filter(creeps, (creep) => creep.memory.role === "claimer").length;
     // Determine what to spawn
+    interface SpawnInfo {
+      memory: CreepMemory;
+      name: string;
+      parts: BodyPartConstant[];
+    }
+    let spawnInfo: SpawnInfo|null = null;
     if (spawn.spawning) {
       // Do nothing, wait for the spawn to complete
     } else if (numHarvesters < 4) {
-      const newName = "Harvester" + Game.time;
-      console.log("Spawning new harvester: " + newName);
-      spawn.spawnCreep(bestWorkerParts, newName, {memory: {role: "harvester"} as CreepMemory});
+      spawnInfo = {
+        memory: {role: "harvester"} as CreepMemory,
+        name: "Harvester" + Game.time,
+        parts: bestWorkerParts,
+      };
     } else if ((room.controller as StructureController).level >= 3 && numMiners < 2) {
       // TODO Replace this code with better creep management
-      const minerOne = Game.creeps.MinerOne;
-      const minerTwo = Game.creeps.MinerTwo;
+      const minerOneName = "MinerOne_" + room.name;
+      const minerTwoName = "MinerTwo_" + room.name;
+      const minerOne = Game.creeps[minerOneName];
+      const minerTwo = Game.creeps[minerTwoName];
       if (!minerOne) {
-        const newName = "MinerOne";
-        console.log("Spawning new miner: " + newName);
-        const options = {memory: {role: "miner", sourceIndex: 0} as CreepMemory};
-        spawn.spawnCreep(bestMinerParts, newName, options);
+        spawnInfo = {
+          memory: {role: "miner", sourceIndex: 0} as CreepMemory,
+          name: minerOneName,
+          parts: bestMinerParts,
+        };
       } else if (!minerTwo) {
-        const newName = "MinerTwo";
-        console.log("Spawning new miner: " + newName);
-        const options = {memory: {role: "miner", sourceIndex: 1} as CreepMemory};
-        spawn.spawnCreep(bestMinerParts, newName, options);
+        spawnInfo = {
+          memory: {role: "miner", sourceIndex: 1} as CreepMemory,
+          name: minerTwoName,
+          parts: bestMinerParts,
+        };
       }
     } else if (numBuilders < 2) {
-      const newName = "Builder" + Game.time;
-      console.log("Spawning new builder: " + newName);
-      spawn.spawnCreep(bestWorkerParts, newName, {memory: {role: "builder"} as CreepMemory});
+      spawnInfo = {
+        memory: {role: "builder"} as CreepMemory,
+        name: "Builder" + Game.time,
+        parts: bestWorkerParts,
+      };
     } else if (numUpgraders < 4) {
-      const newName = "Upgrader" + Game.time;
-      console.log("Spawning new upgrader: " + newName);
-      spawn.spawnCreep(bestWorkerParts, newName, {memory: {role: "upgrader"} as CreepMemory});
+      spawnInfo = {
+        memory: {role: "upgrader"} as CreepMemory,
+        name: "Upgrader" + Game.time,
+        parts: bestWorkerParts,
+      };
     } else if (numWallers < 2) {
-      const newName = "Waller" + Game.time;
-      console.log("Spawning new waller: " + newName);
-      spawn.spawnCreep(bestWorkerParts, newName, {memory: {role: "waller"} as CreepMemory});
+      spawnInfo = {
+        memory: {role: "waller"} as CreepMemory,
+        name: "Waller" + Game.time,
+        parts: bestWorkerParts,
+      };
     } else if (numAttackers < 6) {
-      const newName = "Attacker" + Game.time;
-      console.log("Spawning new attacker: " + newName);
-      const options = {memory: {role: "attacker", attackFlagName: "AttackFlag"} as CreepMemory};
-      spawn.spawnCreep(bestAttackerParts, newName, options);
-    } else if (numClaimers < 1) {
-      const newName = "Claimer" + Game.time;
-      console.log("Spawning new claimer: " + newName);
-      const options = {memory: {role: "claimer", claimFlagName: "ClaimFlag"} as CreepMemory};
-      spawn.spawnCreep(bestClaimerParts, newName, options);
+      spawnInfo = {
+        memory: {role: "attacker", attackFlagName: "AttackFlag"} as CreepMemory,
+        name: "Attacker" + Game.time,
+        parts: bestAttackerParts,
+      };
+    } else if ((room.controller as StructureController).level >= 3 && numClaimers < 1) {
+      spawnInfo = {
+        memory: {role: "claimer", claimFlagName: "ClaimFlag"} as CreepMemory,
+        name: "Claimer" + Game.time,
+        parts: bestClaimerParts,
+      };
+    }
+    // Try to spawn a creep
+    if (spawnInfo) {
+      console.log(C(room) + "Wants to spawn: " + spawnInfo.name);
+      if (spawn.spawnCreep(spawnInfo.parts, spawnInfo.name, {memory: spawnInfo.memory}) === OK) {
+        console.log(C(room) + "Spawning new creep: " + spawnInfo.name);
+        room.memory.creepNames.push(spawnInfo.name);
+      }
     }
   }
 
