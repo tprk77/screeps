@@ -10,6 +10,13 @@ import {Waller} from "../creeps/waller";
 import {Tower} from "../towers/tower";
 import * as Utils from "./utils";
 
+/*
+ * Quick logging utilitly to show the colony room.
+ */
+function C(room: Room): string {
+  return "[" + room.name + "] ";
+}
+
 /**
  * A Colony of creeps.
  */
@@ -23,7 +30,7 @@ export class Colony {
   public static run(room: Room): void {
     // TODO REMOVE!
     if (room.memory.creepIds) {
-      console.log("CLEARING MEMORY!");
+      console.log(C(room) + "CLEARING MEMORY!");
       delete room.memory.creepIds;
       delete room.memory;
     }
@@ -45,7 +52,7 @@ export class Colony {
       if (creep) {
         creeps.push(creep);
       } else {
-        console.log("Creep has died: " + creepName);
+        console.log(C(room) + "Creep has died: " + creepName);
       }
     }) as Creep[];
     // Remove dead creeps from the colony memory
@@ -63,7 +70,7 @@ export class Colony {
    * @param override Reset the colony's memory.
    */
   private static initializeColonyMemory(room: Room, override: boolean = false): void {
-    console.log("Initializing colony memory!");
+    console.log(C(room) + "Initializing colony memory!");
     if (room.memory.creepNames == null) {
       room.memory.creepNames = [];
       // TODO REMOVE! JANK CODE!
@@ -186,9 +193,9 @@ export class Colony {
     }
     // Try to spawn a creep
     if (spawnInfo) {
-      console.log("Wants to spawn: " + spawnInfo.name);
+      console.log(C(room) + "Wants to spawn: " + spawnInfo.name);
       if (spawn.spawnCreep(spawnInfo.parts, spawnInfo.name, {memory: spawnInfo.memory}) === OK) {
-        console.log("Spawning new creep: " + spawnInfo.name);
+        console.log(C(room) + "Spawning new creep: " + spawnInfo.name);
         room.memory.creepNames.push(spawnInfo.name);
       }
     }
