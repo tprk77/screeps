@@ -184,7 +184,7 @@ export class Colony {
         name: "Attacker" + Game.time,
         parts: bestAttackerParts,
       };
-    } else if (numClaimers < 1) {
+    } else if ((room.controller as StructureController).level >= 3 && numClaimers < 1) {
       spawnInfo = {
         memory: {role: "claimer", claimFlagName: "ClaimFlag"} as CreepMemory,
         name: "Claimer" + Game.time,
