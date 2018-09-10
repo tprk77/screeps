@@ -21,6 +21,12 @@ export class Colony {
    * @param room The claimed room of the colony.
    */
   public static run(room: Room): void {
+    // TODO REMOVE!
+    if (room.memory.creepIds) {
+      console.log("CLEARING MEMORY!");
+      delete room.memory.creepIds;
+      delete room.memory;
+    }
     // Check to initialize colony memory
     if (!room.memory) {
       Colony.initializeColonyMemory(room);
@@ -34,8 +40,8 @@ export class Colony {
       filter: (structure) => structure.structureType === STRUCTURE_TOWER,
     }) as StructureTower[];
     // Get the creeps spawned from this colony, no matter the current room
-    const existingCreeps = _.transform(room.memory.creepIds, (creeps, creepId) => {
-      const creep = Game.getObjectById(creepId) as Creep | null;
+    const existingCreeps = _.transform(room.memory.creepNames, (creeps, creepName) => {
+      const creep = Game.creeps[creepName];
       if (creep) {
         creeps.push(creep);
       }
@@ -48,7 +54,7 @@ export class Colony {
     // Combine new and existing creeps
     const creeps = newCreeps.concat(existingCreeps);
     // Remove dead creeps from the colony memory
-    room.memory.creepIds = creeps.map((creep) => creep.id);
+    room.memory.creepNames = creeps.map((creep) => creep.name);
     // Run everything in the colony!
     Colony.runSpawns(room, spawns, creeps);
     Colony.runTowers(room, towers);
@@ -62,11 +68,12 @@ export class Colony {
    * @param override Reset the colony's memory.
    */
   private static initializeColonyMemory(room: Room, override: boolean = false): void {
-    if (room.memory.creepIds == null) {
-      room.memory.creepIds = [];
+    console.log("Initializing colony memory!");
+    if (room.memory.creepNames == null) {
+      room.memory.creepNames = [];
       // TODO REMOVE! JANK CODE!
       // Using this to transfer all creeps to the only room I have at the moment!
-      room.memory.creepIds = _.map(Game.creeps, (creep) => creep.id);
+      room.memory.creepNames = _.map(Game.creeps, (creep) => creep.name);
     }
   }
 
