@@ -14,6 +14,7 @@ declare interface CreepMemory {
 
   // Builder memory
   building: boolean;
+  buildFlagName: string;
 
   // Waller memory
   walling: boolean;
