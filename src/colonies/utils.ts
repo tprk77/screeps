@@ -2,6 +2,7 @@
 
 /**
  * Get the total cost of some parts.
+ *
  * @param parts The parts to get the cost of.
  * @return The cost of all the parts.
  */
@@ -11,6 +12,7 @@ export function getPartsCost(parts: BodyPartConstant[]): number {
 
 /**
  * Find a collection of parts below a certain energy budget.
+ *
  * @param energy The energy budget. The cost of all parts shall not exceed this number.
  * @param partGroups Any number of part groups to collect into the result. Each group is added to
  * the result as a single unit. The groups are added in reverse order. The first group may be
@@ -79,6 +81,7 @@ export function getPartsForEnergy(energy: number, partGroups: BodyPartConstant[]
 
 /**
  * Arrange parts according to a template.
+ *
  * @param partTemplate The array of unique parts, determining the order of the result.
  * @param jumbledParts The parts to reorder according to the template.
  * @return The reordered parts.
@@ -102,6 +105,7 @@ export function arrangeParts(partTemplate: BodyPartConstant[],
 
 /**
  * Finds the best body possible for the given cost.
+ *
  * @param energy The energy budget. The cost of all parts shall not exceed this number.
  * @param partTemplate The array of unique parts, determining the order of the result.
  * @param partGroups Any number of part groups to collect into the result. Each group is added to

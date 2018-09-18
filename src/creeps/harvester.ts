@@ -6,6 +6,7 @@ import {GraveDig} from "./tasks/gravedig";
 import {Harvest} from "./tasks/harvest";
 import {MoveFromMinerSource, MoveFromSource} from "./tasks/movefromsource";
 import {Pickup} from "./tasks/pickup";
+import {StoreInStorage} from "./tasks/store";
 import {Upgrade} from "./tasks/upgrade";
 import {Withdraw} from "./tasks/withdraw";
 import * as Utils from "./utils";
@@ -30,6 +31,7 @@ export class Harvester {
         MoveFromMinerSource,
         Deposit,
         Build,
+        StoreInStorage,
         Upgrade,
       ]);
     } else {

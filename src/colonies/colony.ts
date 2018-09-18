@@ -92,7 +92,9 @@ export class Colony {
     const bestMinerParts = Utils.getBestPartsForEnergy(
         Math.max(room.energyAvailable, 0.75 * room.energyCapacityAvailable),
         [WORK, CARRY, MOVE],
-        [[WORK], [WORK, CARRY, MOVE]],
+        // More than 8 WORK is just wasteful
+        [[WORK], [WORK], [WORK], [WORK], [WORK], [WORK], [WORK], [WORK, CARRY, MOVE]],
+        false,
     );
     const bestAttackerParts = Utils.getBestPartsForEnergy(
         room.energyAvailable,
