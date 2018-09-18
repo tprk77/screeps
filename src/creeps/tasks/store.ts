@@ -23,3 +23,24 @@ export class StoreInNearbyContainer {
     }
   }
 }
+
+export class StoreInStorage {
+  public static run(creep: Creep): boolean {
+    if (!_.get(creep.room.controller, "my", false)) {
+      return false;
+    }
+    const storages = creep.room.find(FIND_STRUCTURES, {
+      filter: (structure) => (structure.structureType === STRUCTURE_STORAGE
+                              && _.sum(structure.store) !== structure.storeCapacity),
+    });
+    if (storages.length) {
+      const storage = storages[0];
+      if (creep.transfer(storage, RESOURCE_ENERGY) === ERR_NOT_IN_RANGE) {
+        creep.moveTo(storage, {visualizePathStyle: {stroke: "#ffffff"}});
+      }
+      return true;
+    } else {
+      return false;
+    }
+  }
+}
