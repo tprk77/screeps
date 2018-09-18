@@ -13,9 +13,9 @@ export class StoreInNearbyContainer {
                                   && _.sum(structure.store) !== structure.storeCapacity),
         });
     if (containers.length) {
-      const consumer = containers[0];
-      if (creep.transfer(consumer, RESOURCE_ENERGY) === ERR_NOT_IN_RANGE) {
-        creep.moveTo(consumer, {visualizePathStyle: {stroke: "#ffffff"}});
+      const container = containers[0];
+      if (creep.transfer(container, RESOURCE_ENERGY) === ERR_NOT_IN_RANGE) {
+        creep.moveTo(container, {visualizePathStyle: {stroke: "#ffffff"}});
       }
       return true;
     } else {
