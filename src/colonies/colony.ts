@@ -1,13 +1,17 @@
 // Copyright (c) 2018 Tim Perkins
 
+import {Upgrade} from "creeps/tasks/upgrade";
+
 import {Attacker} from "../creeps/attacker";
 import {Builder} from "../creeps/builder";
 import {Claimer} from "../creeps/claimer";
 import {Harvester} from "../creeps/harvester";
 import {Miner} from "../creeps/miner";
 import {Upgrader} from "../creeps/upgrader";
+import {Role} from "../creeps/utils";
 import {Waller} from "../creeps/waller";
 import {Tower} from "../towers/tower";
+
 import * as Utils from "./utils";
 
 /*
@@ -29,8 +33,8 @@ export class Colony {
    */
   public static run(room: Room): void {
     // Check to initialize colony memory
-    if (!room.memory) {
-      Colony.initializeColonyMemory(room);
+    if (Colony.memoryNeedsInitialization(room)) {
+      Colony.initializeMemory(room);
     }
     // Get the spawns in the main colony room
     const spawns = room.find(FIND_MY_STRUCTURES, {
@@ -58,15 +62,34 @@ export class Colony {
   }
 
   /**
+   * Determines if the colony needs its memory initialized.
+   *
+   * @param room The colony room, providing memory access.
+   */
+  private static memoryNeedsInitialization(room: Room): boolean {
+    return !room.memory.creepNames || !room.memory.sourceIds || !room.memory.minerNameForSourceId;
+  }
+
+  /**
    * Initializes the colony's memory.
    *
    * @param room The colony room, providing memory access.
    * @param override Reset the colony's memory.
    */
-  private static initializeColonyMemory(room: Room, override: boolean = false): void {
+  private static initializeMemory(room: Room, override: boolean = false): void {
     console.log(C(room) + "Initializing colony memory!");
-    if (room.memory.creepNames == null) {
+    if (override || room.memory.creepNames == null) {
       room.memory.creepNames = [];
+    }
+    if (override || room.memory.sourceIds == null) {
+      const sources = room.find(FIND_SOURCES);
+      room.memory.sourceIds = _.map(sources, (source) => source.id);
+    }
+    if (override || room.memory.minerNameForSourceId == null) {
+      room.memory.minerNameForSourceId = {};
+      for (const sourceId of room.memory.sourceIds) {
+        room.memory.minerNameForSourceId[sourceId] = null;
+      }
     }
   }
 
@@ -78,118 +101,85 @@ export class Colony {
    * @param creeps The creeps of the colony, mostly to count existing creeps.
    */
   private static runSpawns(room: Room, spawns: StructureSpawn[], creeps: Creep[]): void {
+    const controller = room.controller as StructureController;
     // TODO Mutli-spawn support
     if (!spawns.length) {
       return;
     }
     const spawn = spawns[0];
-    // Figure out the best parts for potenital new creeps
-    const bestWorkerParts = Utils.getBestPartsForEnergy(
-        room.energyAvailable,
-        [CARRY, WORK, MOVE],
-        [[CARRY, WORK, MOVE]],
-    );
-    const bestMinerParts = Utils.getBestPartsForEnergy(
-        Math.max(room.energyAvailable, 0.75 * room.energyCapacityAvailable),
-        [WORK, CARRY, MOVE],
-        // More than 8 WORK is just wasteful
-        [[WORK], [WORK], [WORK], [WORK], [WORK], [WORK], [WORK], [WORK, CARRY, MOVE]],
-        false,
-    );
-    const bestAttackerParts = Utils.getBestPartsForEnergy(
-        room.energyAvailable,
-        [TOUGH, ATTACK, MOVE],
-        [
-          [TOUGH, TOUGH, TOUGH, MOVE, MOVE, MOVE],
-          [ATTACK, ATTACK, MOVE, MOVE],
-          [ATTACK, MOVE],
-        ],
-        false,
-    );
-    const bestClaimerParts = Utils.getBestPartsForEnergy(
-        room.energyAvailable,
-        [CLAIM, MOVE],
-        [[CLAIM, MOVE]],
-    );
-    // Count all the different creeps
-    const numHarvesters = _.filter(creeps, (creep) => creep.memory.role === "harvester").length;
-    const numMiners = _.filter(creeps, (creep) => creep.memory.role === "miner").length;
-    const numBuilders = _.filter(creeps, (creep) => creep.memory.role === "builder").length;
-    const numUpgraders = _.filter(creeps, (creep) => creep.memory.role === "upgrader").length;
-    const numWallers = _.filter(creeps, (creep) => creep.memory.role === "waller").length;
-    const numAttackers = _.filter(creeps, (creep) => creep.memory.role === "attacker").length;
-    const numClaimers = _.filter(creeps, (creep) => creep.memory.role === "claimer").length;
+    // Description of what the colony's creeps should be
+    interface RoleDescriptions {
+      [roleName: string]: {role: Role, population: number, atLevel?: number};
+    }
+    // Make a miner per source
+    const minerPopulation = room.memory.sourceIds.length;
+    const roleDescriptions: RoleDescriptions = {
+      [Harvester.ROLE_NAME]: {role: Harvester, population: 4},
+      [Miner.ROLE_NAME]: {role: Miner, population: minerPopulation, atLevel: 2},
+      [Builder.ROLE_NAME]: {role: Builder, population: 2},
+      [Upgrader.ROLE_NAME]: {role: Upgrader, population: 4},
+      [Waller.ROLE_NAME]: {role: Waller, population: 2},
+      [Attacker.ROLE_NAME]: {role: Attacker, population: 6},
+      [Claimer.ROLE_NAME]: {role: Claimer, population: 1, atLevel: 3},
+    } as RoleDescriptions;
+    // Get the actual population for each role
+    const rolePopulations = _.mapValues(roleDescriptions, (description) => {
+      return _.filter(creeps, (creep) => Utils.hasRole(description.role, creep)).length;
+    });
+    // The order in which to spawn creeps (highest priority first)
+    const spawnOrder = [
+      Harvester.ROLE_NAME,
+      Miner.ROLE_NAME,
+      Builder.ROLE_NAME,
+      Upgrader.ROLE_NAME,
+      Waller.ROLE_NAME,
+      Attacker.ROLE_NAME,
+      Claimer.ROLE_NAME,
+    ];
     // Determine what to spawn
-    interface SpawnInfo {
-      memory: CreepMemory;
-      name: string;
-      parts: BodyPartConstant[];
-    }
-    let spawnInfo: SpawnInfo|null = null;
-    if (spawn.spawning) {
-      // Do nothing, wait for the spawn to complete
-    } else if (numHarvesters < 4) {
-      spawnInfo = {
-        memory: {role: "harvester"} as CreepMemory,
-        name: "Harvester" + Game.time,
-        parts: bestWorkerParts,
-      };
-    } else if ((room.controller as StructureController).level >= 3 && numMiners < 2) {
-      // TODO Replace this code with better creep management
-      const minerOneName = "MinerOne_" + room.name;
-      const minerTwoName = "MinerTwo_" + room.name;
-      const minerOne = Game.creeps[minerOneName];
-      const minerTwo = Game.creeps[minerTwoName];
-      if (!minerOne) {
-        spawnInfo = {
-          memory: {role: "miner", sourceIndex: 0} as CreepMemory,
-          name: minerOneName,
-          parts: bestMinerParts,
-        };
-      } else if (!minerTwo) {
-        spawnInfo = {
-          memory: {role: "miner", sourceIndex: 1} as CreepMemory,
-          name: minerTwoName,
-          parts: bestMinerParts,
-        };
-      }
-    } else if (numBuilders < 2) {
-      spawnInfo = {
-        memory: {role: "builder"} as CreepMemory,
-        name: "Builder" + Game.time,
-        parts: bestWorkerParts,
-      };
-    } else if (numUpgraders < 4) {
-      spawnInfo = {
-        memory: {role: "upgrader"} as CreepMemory,
-        name: "Upgrader" + Game.time,
-        parts: bestWorkerParts,
-      };
-    } else if (numWallers < 2) {
-      spawnInfo = {
-        memory: {role: "waller"} as CreepMemory,
-        name: "Waller" + Game.time,
-        parts: bestWorkerParts,
-      };
-    } else if (numAttackers < 6) {
-      spawnInfo = {
-        memory: {role: "attacker", attackFlagName: "AttackFlag"} as CreepMemory,
-        name: "Attacker" + Game.time,
-        parts: bestAttackerParts,
-      };
-    } else if ((room.controller as StructureController).level >= 3 && numClaimers < 1) {
-      spawnInfo = {
-        memory: {role: "claimer", claimFlagName: "ClaimFlag"} as CreepMemory,
-        name: "Claimer" + Game.time,
-        parts: bestClaimerParts,
-      };
-    }
-    // Try to spawn a creep
-    if (spawnInfo) {
-      console.log(C(room) + "Wants to spawn: " + spawnInfo.name);
-      if (spawn.spawnCreep(spawnInfo.parts, spawnInfo.name, {memory: spawnInfo.memory}) === OK) {
-        console.log(C(room) + "Spawning new creep: " + spawnInfo.name);
-        room.memory.creepNames.push(spawnInfo.name);
+    for (const roleName of spawnOrder) {
+      const roleDescription = roleDescriptions[roleName];
+      const rolePopulation = rolePopulations[roleName];
+      if ((roleDescription.atLevel == null || controller.level >= roleDescription.atLevel)
+          && rolePopulation < roleDescription.population) {
+        const role = roleDescription.role;
+        const name = Utils.generateCreepName(role, Game.time);
+        const memory = Utils.generateMemory(role);
+        const parts = Utils.getBestPartsForEnergy(
+            room.energyAvailable,
+            role.PART_TEMPLATE,
+            role.PART_GROUPS,
+            role.REPEAT_PARTS,
+        );
+        // TODO HACKS Adjust as necessary...
+        if (role === Miner) {
+          // Find which source this miner should use
+          for (const sourceId of room.memory.sourceIds) {
+            const minerName = room.memory.minerNameForSourceId[sourceId];
+            const minerCreep = minerName && Game.creeps[minerName];
+            if (!minerCreep) {
+              // Assign the source to the miner
+              room.memory.minerNameForSourceId[sourceId] = name;
+              memory.sourceId = sourceId;
+              break;
+            }
+          }
+          // Ensure that we actually set a source ID
+          if (!memory.sourceId) {
+            continue;
+          }
+        } else if (role === Attacker) {
+          memory.attackFlagName = "AttackFlag";
+        } else if (role === Claimer) {
+          memory.attackFlagName = "ClaimerFlag";
+        }
+        // Actually try to spawn the creep
+        console.log(C(room) + "Wants to spawn: " + name);
+        if (spawn.spawnCreep(parts, name, {memory}) === OK) {
+          console.log(C(room) + "Spawning new creep: " + name);
+          room.memory.creepNames.push(name);
+        }
+        break;
       }
     }
   }

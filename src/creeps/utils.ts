@@ -1,5 +1,19 @@
 // Copyright (c) 2018 Tim Perkins
 
+/**
+ * Creep role interface.
+ */
+export interface Role {
+  ROLE_NAME: string;
+  PART_TEMPLATE: BodyPartConstant[];
+  PART_GROUPS: BodyPartConstant[][];
+  REPEAT_PARTS: boolean;
+  run: (creep: Creep) => void;
+}
+
+/**
+ * Task interface, for running tasks. See also `runTasks`.
+ */
 interface Task {
   run: (creep: Creep) => boolean;
 }

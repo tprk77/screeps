@@ -9,6 +9,23 @@ import {Withdraw} from "./tasks/withdraw";
 import * as Utils from "./utils";
 
 export class Miner {
+
+  public static readonly ROLE_NAME = "miner";
+  public static readonly PART_TEMPLATE = [WORK, CARRY, MOVE];
+  private static readonly _PG_B = [WORK];
+  private static readonly _PG_A = [WORK, CARRY, MOVE];
+  public static readonly PART_GROUPS = [
+    Miner._PG_B,
+    Miner._PG_B,
+    Miner._PG_B,
+    Miner._PG_B,
+    Miner._PG_B,
+    Miner._PG_B,
+    Miner._PG_B,
+    Miner._PG_A,
+  ];
+  public static readonly REPEAT_PARTS = false;
+
   /**
    * Miners are like Harvesters, but instead of distributing their energy all over the room, they
    * only place their energy in nearby containers. They might hog the spot in front of the source,
