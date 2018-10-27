@@ -1,12 +1,12 @@
 // Copyright (c) 2018 Tim Perkins
 
 export class MoveToFlag {
-  private static readonly FLAG_DISTANCE_THRESHOLD = 2;
+  public static readonly FLAG_DISTANCE_THRESHOLD = 2;
 
-  private flag: Flag;
+  private _flag: Flag;
 
   constructor(flag: Flag) {
-    this.flag = flag;
+    this._flag = flag;
   }
 
   public static forFlag(flag: Flag|null): MoveToFlag|null {
@@ -14,9 +14,9 @@ export class MoveToFlag {
   }
 
   public run(creep: Creep): boolean {
-    if (creep.room !== this.flag.room
-        || !creep.pos.inRangeTo(this.flag, MoveToFlag.FLAG_DISTANCE_THRESHOLD)) {
-      creep.moveTo(this.flag, {visualizePathStyle: {stroke: "#ffffff"}});
+    if (creep.room !== this._flag.room
+        || !creep.pos.inRangeTo(this._flag, MoveToFlag.FLAG_DISTANCE_THRESHOLD)) {
+      creep.moveTo(this._flag, {visualizePathStyle: {stroke: "#ffffff"}});
       return true;
     } else {
       return false;
@@ -25,10 +25,10 @@ export class MoveToFlag {
 }
 
 export class MoveToFlagRoom {
-  private flag: Flag;
+  private _flag: Flag;
 
   constructor(flag: Flag) {
-    this.flag = flag;
+    this._flag = flag;
   }
 
   public static forFlag(flag: Flag|null): MoveToFlagRoom|null {
@@ -36,8 +36,8 @@ export class MoveToFlagRoom {
   }
 
   public run(creep: Creep): boolean {
-    if (creep.room !== this.flag.room) {
-      creep.moveTo(this.flag, {visualizePathStyle: {stroke: "#ffffff"}});
+    if (creep.room !== this._flag.room) {
+      creep.moveTo(this._flag, {visualizePathStyle: {stroke: "#ffffff"}});
       return true;
     } else {
       return false;
