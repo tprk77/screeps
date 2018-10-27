@@ -5,7 +5,13 @@ export class Build {
     if (!_.get(creep.room.controller, "my", false)) {
       return false;
     }
-    const sites = creep.room.find(FIND_CONSTRUCTION_SITES);
+    const nonRoadSites = creep.room.find(FIND_CONSTRUCTION_SITES, {
+      filter: (site) => site.structureType !== STRUCTURE_ROAD,
+    });
+    const roadSites = nonRoadSites.length ? [] : creep.room.find(FIND_CONSTRUCTION_SITES, {
+      filter: (site) => site.structureType === STRUCTURE_ROAD,
+    });
+    const sites = nonRoadSites.length ? nonRoadSites : roadSites;
     if (sites.length) {
       const site = sites[0];
       if (creep.build(site) === ERR_NOT_IN_RANGE) {
