@@ -12,6 +12,13 @@ import {Withdraw} from "./tasks/withdraw";
 import * as Utils from "./utils";
 
 export class Builder {
+
+  public static readonly ROLE_NAME = "builder";
+  public static readonly PART_TEMPLATE = [CARRY, WORK, MOVE];
+  private static readonly _PG_A = [CARRY, WORK, MOVE];
+  public static readonly PART_GROUPS = [Builder._PG_A];
+  public static readonly REPEAT_PARTS = true;
+
   public static run(creep: Creep): void {
     const fullEnergyThreshold = Utils.getOrSetMemory(creep, "fullEnergyThreshold", () => {
       return Utils.getNoDropEnergyThreshold(creep);

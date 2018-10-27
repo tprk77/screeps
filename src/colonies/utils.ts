@@ -1,5 +1,35 @@
 // Copyright (c) 2018 Tim Perkins
 
+import {Role} from "../creeps/utils";
+
+/**
+ * Just capitalize a string. (Is there a better place to put this?)
+ */
+function capitalize(str: string) {
+  return str.charAt(0).toUpperCase() + str.slice(1);
+}
+
+/**
+ * Generate a creep name based on its role.
+ */
+export function generateCreepName(role: Role, tick: number): string {
+  return capitalize(role.ROLE_NAME) + "_" + tick;
+}
+
+/**
+ * Generate some creep memory based on its role.
+ */
+export function generateMemory(role: Role): CreepMemory {
+  return {role: role.ROLE_NAME} as CreepMemory;
+}
+
+/**
+ * Check if the creep has a role. (Checks the memory of the creep.)
+ */
+export function hasRole(role: Role, creep: Creep): boolean {
+  return creep.memory.role === role.ROLE_NAME;
+}
+
 /**
  * Get the total cost of some parts.
  *

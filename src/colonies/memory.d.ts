@@ -1,13 +1,14 @@
 // Copyright (c) 2018 Tim Perkins
 
 declare interface RoomMemory {
-  // Colony creep IDs
+  // Colony creep names
   creepNames: string[];
-  creepIds: string[];
 
-  // Colony source IDs
-  // sourceIds: string[];
-  // sourceIdPerCreepId: {[key: string]: string};
+  // Source IDs
+  sourceIds: string[];
+
+  // Miner creep names (Index corresponds to source)
+  minerNameForSourceId: {[sourceId: string]: string|null};
 
   // TODO
   // reservedRoomNames: string[];
