@@ -106,7 +106,8 @@ export function getPartsForEnergy(energy: number, partGroups: BodyPartConstant[]
       }
     }
   }
-  return parts;
+  // Only use up to 50 parts
+  return parts.slice(-50);
 }
 
 /**
