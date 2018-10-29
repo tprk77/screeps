@@ -8,7 +8,7 @@ import {MoveFromMinerSource, MoveFromSource} from "./tasks/movefromsource";
 import {Pickup} from "./tasks/pickup";
 import {StoreInStorage} from "./tasks/store";
 import {Upgrade} from "./tasks/upgrade";
-import {Withdraw} from "./tasks/withdraw";
+import {WithdrawFromContainer, WithdrawFromStorage} from "./tasks/withdraw";
 import * as Utils from "./utils";
 
 export class Harvester {
@@ -46,7 +46,8 @@ export class Harvester {
         GraveDig,
         Pickup,
         MoveFromMinerSource,
-        Withdraw,
+        WithdrawFromContainer,
+        WithdrawFromStorage,
         Harvest,
       ]);
     }
