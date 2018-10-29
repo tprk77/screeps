@@ -5,7 +5,7 @@ import {Harvest} from "./tasks/harvest";
 import {MoveFromMinerSource, MoveFromSource} from "./tasks/movefromsource";
 import {Pickup} from "./tasks/pickup";
 import {Upgrade} from "./tasks/upgrade";
-import {Withdraw} from "./tasks/withdraw";
+import {WithdrawFromContainer} from "./tasks/withdraw";
 import * as Utils from "./utils";
 
 export class Upgrader {
@@ -40,7 +40,7 @@ export class Upgrader {
         GraveDig,
         Pickup,
         MoveFromMinerSource,
-        Withdraw,
+        WithdrawFromContainer,
         Harvest,
       ]);
     }
