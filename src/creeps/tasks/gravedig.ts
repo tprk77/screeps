@@ -9,13 +9,14 @@ export class GraveDig {
     if (currentCarrySum === creep.carryCapacity) {
       return false;
     }
-    const tombs = creep.room.find(FIND_TOMBSTONES, {
+    const hostiles = creep.room.find(FIND_HOSTILE_CREEPS);
+    const tombs = hostiles.length ? [] : creep.room.find(FIND_TOMBSTONES, {
       filter: (tomb) => {
         const energyThreshold = GraveDig.TOMBSTONE_CAPACITY_RATIO * creep.carryCapacity;
         return (!!tomb.store.energy
                 && ((currentCarrySum === 0 && tomb.store.energy > energyThreshold)
                     || creep.pos.inRangeTo(tomb, GraveDig.TOMBSTONE_FIND_RANGE)));
-      }
+      },
     });
     if (tombs.length) {
       const tomb = tombs[0];

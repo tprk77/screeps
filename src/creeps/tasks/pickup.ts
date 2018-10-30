@@ -5,7 +5,8 @@ export class Pickup {
     if (_.sum(creep.carry) === creep.carryCapacity) {
       return false;
     }
-    const drops = creep.room.find(FIND_DROPPED_RESOURCES, {
+    const hostiles = creep.room.find(FIND_HOSTILE_CREEPS);
+    const drops = hostiles.length ? [] : creep.room.find(FIND_DROPPED_RESOURCES, {
       filter: (drop) => creep.pos.inRangeTo(drop, 5),
     });
     if (drops.length) {
