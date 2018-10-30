@@ -33,8 +33,6 @@ export class Builder {
     const flag = Game.flags[creep.memory.buildFlagName];
     if (creep.memory.building) {
       Utils.runTasks(creep, [
-        GraveDig,
-        Pickup,
         MoveFromSource,
         MoveFromMinerSource,
         MoveToFlagRoom.forFlag(flag),
@@ -44,8 +42,8 @@ export class Builder {
       ]);
     } else {
       Utils.runTasks(creep, [
-        GraveDig,
         Pickup,
+        GraveDig,
         MoveFromMinerSource,
         WithdrawFromContainer,
         WithdrawFromStorage,

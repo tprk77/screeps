@@ -29,16 +29,14 @@ export class Upgrader {
     }
     if (creep.memory.upgrading) {
       Utils.runTasks(creep, [
-        GraveDig,
-        Pickup,
         MoveFromSource,
         MoveFromMinerSource,
         Upgrade,
       ]);
     } else {
       Utils.runTasks(creep, [
-        GraveDig,
         Pickup,
+        GraveDig,
         MoveFromMinerSource,
         WithdrawFromContainer,
         Harvest,
