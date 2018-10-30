@@ -1,6 +1,7 @@
 // Copyright (c) 2018 Tim Perkins
 
 export class Tower {
+
   public static readonly RESERVE_ENERGY = 500;
 
   public static run(tower: StructureTower): void {

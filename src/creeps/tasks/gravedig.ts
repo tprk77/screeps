@@ -1,6 +1,7 @@
 // Copyright (c) 2018 Tim Perkins
 
 export class GraveDig {
+
   public static readonly TOMBSTONE_FIND_RANGE = 7;
   public static readonly TOMBSTONE_CAPACITY_RATIO = 0.75;
 

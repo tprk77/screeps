@@ -1,6 +1,7 @@
 // Copyright (c) 2018 Tim Perkins
 
 export class Deposit {
+
   public static run(creep: Creep): boolean {
     if (!_.get(creep.room.controller, "my", false)) {
       return false;

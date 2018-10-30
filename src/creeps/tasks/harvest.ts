@@ -1,6 +1,7 @@
 // Copyright (c) 2018 Tim Perkins
 
 export class Harvest {
+
   public static run(creep: Creep): boolean {
     const targetSource = Game.getObjectById(creep.memory.sourceId) as Source | null;
     const otherSources = targetSource ? [] : creep.room.find(FIND_SOURCES);

@@ -1,6 +1,7 @@
 // Copyright (c) 2018 Tim Perkins
 
 export class MoveToFlag {
+
   public static readonly FLAG_DISTANCE_THRESHOLD = 2;
 
   private _flag: Flag;
@@ -25,6 +26,7 @@ export class MoveToFlag {
 }
 
 export class MoveToFlagRoom {
+
   private _flag: Flag;
 
   constructor(flag: Flag) {

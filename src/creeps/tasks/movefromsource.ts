@@ -3,6 +3,7 @@
 import {Vector} from "../../utils/vector";
 
 export class MoveFromSource {
+
   public static readonly SOURCE_FIND_RANGE = 1;
   public static readonly SOURCE_BACKOFF_RADIUS = 3.0;
 
@@ -22,6 +23,7 @@ export class MoveFromSource {
 }
 
 export class MoveFromMinerSource {
+
   public static readonly SOURCE_FIND_RANGE = 3;
   public static readonly MINER_FIND_RANGE = 5; // Relative to source
   public static readonly SOURCE_BACKOFF_RADIUS = 5.0;

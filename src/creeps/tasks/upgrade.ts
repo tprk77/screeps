@@ -1,6 +1,7 @@
 // Copyright (c) 2018 Tim Perkins
 
 export class Upgrade {
+
   public static run(creep: Creep): boolean {
     const controller = creep.room.controller;
     if (controller && controller.my) {

@@ -1,6 +1,7 @@
 // Copyright (c) 2018 Tim Perkins
 
 export class Wall {
+
   public static readonly WALL_GROUP_HITS = [1000, 5000, 10000, 50000, 100000];
   public static readonly WALL_MAX_HITS = _.last(Wall.WALL_GROUP_HITS);
 

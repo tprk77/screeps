@@ -1,6 +1,7 @@
 // Copyright (c) 2018 Tim Perkins
 
 export class StoreInNearbyContainer {
+
   public static readonly CONTAINER_DISTANCE_THESHOLD = 2;
 
   public static run(creep: Creep): boolean {
@@ -25,6 +26,7 @@ export class StoreInNearbyContainer {
 }
 
 export class StoreInStorage {
+
   public static run(creep: Creep): boolean {
     if (!_.get(creep.room.controller, "my", false)) {
       return false;

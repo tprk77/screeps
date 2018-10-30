@@ -1,6 +1,7 @@
 // Copyright (c) 2018 Tim Perkins
 
 export class WithdrawFromContainer {
+
   public static FAR_DISTANCE_THRESHOLD = 5;
   public static FAR_ENERGY_THRESHOLD = 500;
 
@@ -29,6 +30,7 @@ export class WithdrawFromContainer {
  * storage, when the only task it has left to do is fill the storage.
  */
 export class WithdrawFromStorage {
+
   public static run(creep: Creep): boolean {
     const storages = creep.room.find(FIND_STRUCTURES, {
       filter: (structure) => (structure.structureType === STRUCTURE_STORAGE
