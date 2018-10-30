@@ -32,8 +32,6 @@ export class Harvester {
     }
     if (!creep.memory.harvesting) {
       Utils.runTasks(creep, [
-        GraveDig,
-        Pickup,
         MoveFromSource,
         MoveFromMinerSource,
         Deposit,
@@ -43,8 +41,8 @@ export class Harvester {
       ]);
     } else {
       Utils.runTasks(creep, [
-        GraveDig,
         Pickup,
+        GraveDig,
         MoveFromMinerSource,
         WithdrawFromContainer,
         WithdrawFromStorage,

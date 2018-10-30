@@ -33,8 +33,6 @@ export class Waller {
     }
     if (creep.memory.walling) {
       Utils.runTasks(creep, [
-        GraveDig,
-        Pickup,
         MoveFromSource,
         MoveFromMinerSource,
         Wall,
@@ -45,8 +43,8 @@ export class Waller {
       ]);
     } else {
       Utils.runTasks(creep, [
-        GraveDig,
         Pickup,
+        GraveDig,
         MoveFromMinerSource,
         WithdrawFromContainer,
         WithdrawFromStorage,
