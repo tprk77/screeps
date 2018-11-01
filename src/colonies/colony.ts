@@ -26,6 +26,13 @@ function C(room: Room): string {
  */
 export class Colony {
 
+  private static readonly _ENERGY_CAPS: {[roleName: string]: number} = {
+    [Harvester.ROLE_NAME]: 1000,
+    [Builder.ROLE_NAME]: 1000,
+    [Upgrader.ROLE_NAME]: 1000,
+    [Waller.ROLE_NAME]: 1000,
+  };
+
   /**
    * Run the colony.
    *
@@ -145,8 +152,12 @@ export class Colony {
         const role = roleDescription.role;
         const name = Utils.generateCreepName(role, Game.time);
         const memory = Utils.generateMemory(role);
+        // Check for an energy cap on this role
+        const energyCap = Colony._ENERGY_CAPS[roleName];
+        const partEnergy =
+            energyCap ? Math.min(energyCap, room.energyAvailable) : room.energyAvailable;
         const parts = Utils.getBestPartsForEnergy(
-            room.energyAvailable,
+            partEnergy,
             role.PART_TEMPLATE,
             role.PART_GROUPS,
             role.REPEAT_PARTS,
