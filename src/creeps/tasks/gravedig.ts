@@ -22,7 +22,7 @@ export class GraveDig {
     if (tombs.length) {
       const tomb = tombs[0];
       if (creep.withdraw(tomb, RESOURCE_ENERGY) === ERR_NOT_IN_RANGE) {
-        creep.moveTo(tomb, {visualizePathStyle: {stroke: "#ffaa00"}});
+        creep.moveTo(tomb, {maxRooms: 1, visualizePathStyle: {stroke: "#ffaa00"}});
       }
       return true;
     } else {

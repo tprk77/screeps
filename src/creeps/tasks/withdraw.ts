@@ -14,7 +14,7 @@ export class WithdrawFromContainer {
     });
     if (container) {
       if (creep.withdraw(container, RESOURCE_ENERGY) === ERR_NOT_IN_RANGE) {
-        creep.moveTo(container, {visualizePathStyle: {stroke: "#ffaa00"}});
+        creep.moveTo(container, {maxRooms: 1, visualizePathStyle: {stroke: "#ffaa00"}});
       }
       return true;
     } else {
@@ -39,7 +39,7 @@ export class WithdrawFromStorage {
     if (storages.length) {
       const storage = storages[0];
       if (creep.withdraw(storage, RESOURCE_ENERGY) === ERR_NOT_IN_RANGE) {
-        creep.moveTo(storage, {visualizePathStyle: {stroke: "#ffaa00"}});
+        creep.moveTo(storage, {maxRooms: 1, visualizePathStyle: {stroke: "#ffaa00"}});
       }
       return true;
     } else {

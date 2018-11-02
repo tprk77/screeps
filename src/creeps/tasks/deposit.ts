@@ -23,7 +23,7 @@ export class Deposit {
     const consumer = emptyTower || spawnOrExtension || tower;
     if (consumer) {
       if (creep.transfer(consumer, RESOURCE_ENERGY) === ERR_NOT_IN_RANGE) {
-        creep.moveTo(consumer, {visualizePathStyle: {stroke: "#ffffff"}});
+        creep.moveTo(consumer, {maxRooms: 1, visualizePathStyle: {stroke: "#ffffff"}});
       }
       return true;
     } else {

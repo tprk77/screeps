@@ -22,7 +22,7 @@ export class Pickup {
     if (drops.length) {
       const drop = drops[0];
       if (creep.pickup(drop) === ERR_NOT_IN_RANGE) {
-        creep.moveTo(drop, {visualizePathStyle: {stroke: "#ffaa00"}});
+        creep.moveTo(drop, {maxRooms: 1, visualizePathStyle: {stroke: "#ffaa00"}});
       }
       return true;
     } else {

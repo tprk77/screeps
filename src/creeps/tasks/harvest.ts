@@ -8,7 +8,7 @@ export class Harvest {
     const source = targetSource || Harvest.pickSource(creep, otherSources);
     if (source) {
       if (creep.harvest(source) === ERR_NOT_IN_RANGE) {
-        creep.moveTo(source, {visualizePathStyle: {stroke: "#ffaa00"}});
+        creep.moveTo(source, {maxRooms: 1, visualizePathStyle: {stroke: "#ffaa00"}});
       }
       return true;
     } else {
