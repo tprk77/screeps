@@ -11,7 +11,7 @@ export class Pickup {
       return false;
     }
     const hostiles = creep.room.find(FIND_HOSTILE_CREEPS);
-    const drops = hostiles.length ? [] : creep.room.find(FIND_DROPPED_RESOURCES, {
+    const drop = hostiles.length ? null : creep.pos.findClosestByRange(FIND_DROPPED_RESOURCES, {
       filter: (drop) => {
         const energyThreshold = Pickup.DROP_CAPACITY_RATIO * creep.carryCapacity;
         return (drop.resourceType === RESOURCE_ENERGY
@@ -19,8 +19,7 @@ export class Pickup {
                     || creep.pos.inRangeTo(drop, Pickup.DROP_FIND_RANGE)));
       },
     });
-    if (drops.length) {
-      const drop = drops[0];
+    if (drop) {
       if (creep.pickup(drop) === ERR_NOT_IN_RANGE) {
         creep.moveTo(drop, {maxRooms: 1, visualizePathStyle: {stroke: "#ffaa00"}});
       }
