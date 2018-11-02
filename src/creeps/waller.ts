@@ -49,6 +49,7 @@ export class Waller {
         WithdrawFromContainer,
         WithdrawFromStorage,
         Harvest,
+        Return,
       ]);
     }
   }

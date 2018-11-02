@@ -9,7 +9,7 @@ export class Deposit {
     // TODO This needs some hysteresis, it's going to trash around 25% energy
     const emptyTower = creep.pos.findClosestByRange(FIND_STRUCTURES, {
       filter: (structure) => ((structure.structureType === STRUCTURE_TOWER)
-                              && structure.energy < 0.25 * structure.energyCapacity),
+                              && structure.energy < 0.75 * structure.energyCapacity),
     });
     const spawnOrExtension = emptyTower ? null : creep.pos.findClosestByRange(FIND_STRUCTURES, {
       filter: (structure) => ((structure.structureType === STRUCTURE_SPAWN
@@ -18,12 +18,12 @@ export class Deposit {
     });
     const tower = spawnOrExtension ? null : creep.pos.findClosestByRange(FIND_STRUCTURES, {
       filter: (structure) => ((structure.structureType === STRUCTURE_TOWER)
-                              && structure.energy < 0.75 * structure.energyCapacity),
+                              && structure.energy < 0.95 * structure.energyCapacity),
     });
     const consumer = emptyTower || spawnOrExtension || tower;
     if (consumer) {
       if (creep.transfer(consumer, RESOURCE_ENERGY) === ERR_NOT_IN_RANGE) {
-        creep.moveTo(consumer, {visualizePathStyle: {stroke: "#ffffff"}});
+        creep.moveTo(consumer, {maxRooms: 1, visualizePathStyle: {stroke: "#ffffff"}});
       }
       return true;
     } else {

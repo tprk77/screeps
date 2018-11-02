@@ -4,6 +4,7 @@ import {GraveDig} from "./tasks/gravedig";
 import {Harvest} from "./tasks/harvest";
 import {MoveFromMinerSource, MoveFromSource} from "./tasks/movefromsource";
 import {Pickup} from "./tasks/pickup";
+import {Return} from "./tasks/return";
 import {Upgrade} from "./tasks/upgrade";
 import {WithdrawFromContainer} from "./tasks/withdraw";
 import * as Utils from "./utils";
@@ -32,6 +33,7 @@ export class Upgrader {
         MoveFromSource,
         MoveFromMinerSource,
         Upgrade,
+        Return,
       ]);
     } else {
       Utils.runTasks(creep, [
@@ -40,6 +42,7 @@ export class Upgrader {
         MoveFromMinerSource,
         WithdrawFromContainer,
         Harvest,
+        Return,
       ]);
     }
   }

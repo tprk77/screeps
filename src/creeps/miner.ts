@@ -1,11 +1,7 @@
 // Copyright (c) 2018 Tim Perkins
 
-import {GraveDig} from "./tasks/gravedig";
 import {Harvest} from "./tasks/harvest";
-import {Pickup} from "./tasks/pickup";
 import {StoreInNearbyContainer} from "./tasks/store";
-import {Upgrade} from "./tasks/upgrade";
-import {Withdraw} from "./tasks/withdraw";
 import * as Utils from "./utils";
 
 export class Miner {

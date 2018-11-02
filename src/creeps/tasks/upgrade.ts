@@ -6,7 +6,7 @@ export class Upgrade {
     const controller = creep.room.controller;
     if (controller && controller.my) {
       if (creep.upgradeController(controller) === ERR_NOT_IN_RANGE) {
-        creep.moveTo(controller, {visualizePathStyle: {stroke: "#ffffff"}});
+        creep.moveTo(controller, {maxRooms: 1, visualizePathStyle: {stroke: "#ffffff"}});
       }
       return true;
     } else {

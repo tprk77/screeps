@@ -14,7 +14,7 @@ export class MoveFromSource {
       const sourceVec = Vector.fromObject(source.pos);
       const creepVec = Vector.fromObject(creep.pos);
       const destVec = creepVec.expelRadius(sourceVec, this.SOURCE_BACKOFF_RADIUS).round();
-      creep.moveTo(destVec.x, destVec.y, {visualizePathStyle: {stroke: "#ff0000"}});
+      creep.moveTo(destVec.x, destVec.y, {maxRooms: 1, visualizePathStyle: {stroke: "#ff0000"}});
       return true;
     } else {
       return false;
@@ -39,7 +39,7 @@ export class MoveFromMinerSource {
       const sourceVec = Vector.fromObject(source.pos);
       const creepVec = Vector.fromObject(creep.pos);
       const destVec = creepVec.expelRadius(sourceVec, this.SOURCE_BACKOFF_RADIUS).round();
-      creep.moveTo(destVec.x, destVec.y, {visualizePathStyle: {stroke: "#ff0000"}});
+      creep.moveTo(destVec.x, destVec.y, {maxRooms: 1, visualizePathStyle: {stroke: "#ff0000"}});
       return true;
     } else {
       return false;

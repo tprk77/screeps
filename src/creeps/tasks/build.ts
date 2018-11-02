@@ -16,7 +16,7 @@ export class Build {
     if (sites.length) {
       const site = sites[0];
       if (creep.build(site) === ERR_NOT_IN_RANGE) {
-        creep.moveTo(site, {visualizePathStyle: {stroke: "#ffffff"}});
+        creep.moveTo(site, {maxRooms: 1, visualizePathStyle: {stroke: "#ffffff"}});
       }
       return true;
     } else {

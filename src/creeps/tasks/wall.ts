@@ -16,7 +16,7 @@ export class Wall {
     if (wallSites.length) {
       const wallSite = wallSites[0];
       if (creep.build(wallSite) === ERR_NOT_IN_RANGE) {
-        creep.moveTo(wallSite, {visualizePathStyle: {stroke: "#ffffff"}});
+        creep.moveTo(wallSite, {maxRooms: 1, visualizePathStyle: {stroke: "#ffffff"}});
       }
       return true;
     } else {
@@ -32,7 +32,7 @@ export class Wall {
       const wall = lowestGroupHits ? wallGroups[lowestGroupHits][0] : null;
       if (wall) {
         if (creep.repair(wall) === ERR_NOT_IN_RANGE) {
-          creep.moveTo(wall, {visualizePathStyle: {stroke: "#ffffff"}});
+          creep.moveTo(wall, {maxRooms: 1, visualizePathStyle: {stroke: "#ffffff"}});
         }
         return true;
       } else {

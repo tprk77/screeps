@@ -6,6 +6,7 @@ import {GraveDig} from "./tasks/gravedig";
 import {Harvest} from "./tasks/harvest";
 import {MoveFromMinerSource, MoveFromSource} from "./tasks/movefromsource";
 import {Pickup} from "./tasks/pickup";
+import {Return} from "./tasks/return";
 import {StoreInStorage} from "./tasks/store";
 import {Upgrade} from "./tasks/upgrade";
 import {WithdrawFromContainer, WithdrawFromStorage} from "./tasks/withdraw";
@@ -38,6 +39,7 @@ export class Harvester {
         Build,
         StoreInStorage,
         Upgrade,
+        Return,
       ]);
     } else {
       Utils.runTasks(creep, [
@@ -47,6 +49,7 @@ export class Harvester {
         WithdrawFromContainer,
         WithdrawFromStorage,
         Harvest,
+        Return,
       ]);
     }
   }

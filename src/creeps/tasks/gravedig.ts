@@ -11,7 +11,7 @@ export class GraveDig {
       return false;
     }
     const hostiles = creep.room.find(FIND_HOSTILE_CREEPS);
-    const tombs = hostiles.length ? [] : creep.room.find(FIND_TOMBSTONES, {
+    const tomb = hostiles.length ? null : creep.pos.findClosestByRange(FIND_TOMBSTONES, {
       filter: (tomb) => {
         const energyThreshold = GraveDig.TOMBSTONE_CAPACITY_RATIO * creep.carryCapacity;
         return (!!tomb.store.energy
@@ -19,10 +19,9 @@ export class GraveDig {
                     || creep.pos.inRangeTo(tomb, GraveDig.TOMBSTONE_FIND_RANGE)));
       },
     });
-    if (tombs.length) {
-      const tomb = tombs[0];
+    if (tomb) {
       if (creep.withdraw(tomb, RESOURCE_ENERGY) === ERR_NOT_IN_RANGE) {
-        creep.moveTo(tomb, {visualizePathStyle: {stroke: "#ffaa00"}});
+        creep.moveTo(tomb, {maxRooms: 1, visualizePathStyle: {stroke: "#ffaa00"}});
       }
       return true;
     } else {

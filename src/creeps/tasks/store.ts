@@ -16,7 +16,7 @@ export class StoreInNearbyContainer {
     if (containers.length) {
       const container = containers[0];
       if (creep.transfer(container, RESOURCE_ENERGY) === ERR_NOT_IN_RANGE) {
-        creep.moveTo(container, {visualizePathStyle: {stroke: "#ffffff"}});
+        creep.moveTo(container, {maxRooms: 1, visualizePathStyle: {stroke: "#ffffff"}});
       }
       return true;
     } else {
@@ -38,7 +38,7 @@ export class StoreInStorage {
     if (storages.length) {
       const storage = storages[0];
       if (creep.transfer(storage, RESOURCE_ENERGY) === ERR_NOT_IN_RANGE) {
-        creep.moveTo(storage, {visualizePathStyle: {stroke: "#ffffff"}});
+        creep.moveTo(storage, {maxRooms: 1, visualizePathStyle: {stroke: "#ffffff"}});
       }
       return true;
     } else {
