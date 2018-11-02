@@ -7,6 +7,7 @@ import {Harvest} from "./tasks/harvest";
 import {MoveFromMinerSource, MoveFromSource} from "./tasks/movefromsource";
 import {MoveToFlagRoom} from "./tasks/movetoflag";
 import {Pickup} from "./tasks/pickup";
+import {Return} from "./tasks/return";
 import {Upgrade} from "./tasks/upgrade";
 import {WithdrawFromContainer, WithdrawFromStorage} from "./tasks/withdraw";
 import * as Utils from "./utils";
@@ -39,6 +40,7 @@ export class Builder {
         Build,
         Deposit,
         Upgrade,
+        Return,
       ]);
     } else {
       Utils.runTasks(creep, [
@@ -48,6 +50,7 @@ export class Builder {
         WithdrawFromContainer,
         WithdrawFromStorage,
         Harvest,
+        Return,
       ]);
     }
   }
