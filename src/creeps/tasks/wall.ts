@@ -35,7 +35,9 @@ export class Wall {
         return _.find(Wall.WALL_GROUP_HITS, (groupHits) => wall.hits < groupHits);
       });
       const lowestGroupHits = _.find(Wall.WALL_GROUP_HITS, (groupHits) => groupHits in wallGroups);
-      const wall = lowestGroupHits ? wallGroups[lowestGroupHits][0] : null;
+      const wall = !lowestGroupHits ? null : _.min(wallGroups[lowestGroupHits], (wall) => {
+        return creep.pos.getRangeTo(wall);
+      });
       if (wall) {
         if (creep.repair(wall) === ERR_NOT_IN_RANGE) {
           creep.moveTo(wall, {
