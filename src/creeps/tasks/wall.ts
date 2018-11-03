@@ -2,7 +2,8 @@
 
 export class Wall {
 
-  public static readonly WALL_GROUP_HITS = [1000, 5000, 10000, 50000, 100000];
+  public static readonly WALL_GROUP_HITS =
+      [1000, 5000, 10000, 50000, 100000, 150000, 200000, 250000, 300000];
   public static readonly WALL_MAX_HITS = _.last(Wall.WALL_GROUP_HITS);
   public static readonly WALLING_RANGE = 3;
 
