@@ -74,7 +74,8 @@ export class Colony {
    * @param room The colony room, providing memory access.
    */
   private static memoryNeedsInitialization(room: Room): boolean {
-    return !room.memory.creepNames || !room.memory.sourceIds || !room.memory.minerNameForSourceId;
+    return (room.memory.creepNames == null || room.memory.sourceIds == null
+            || room.memory.minerNameForSourceId == null || room.memory.towers == null);
   }
 
   /**
@@ -97,6 +98,9 @@ export class Colony {
       for (const sourceId of room.memory.sourceIds) {
         room.memory.minerNameForSourceId[sourceId] = null;
       }
+    }
+    if (override || room.memory.towers == null) {
+      room.memory.towers = {};
     }
   }
 

@@ -1,6 +1,7 @@
 // Copyright (c) 2018 Tim Perkins
 
 declare interface RoomMemory {
+
   // Colony creep names
   creepNames: string[];
 
@@ -12,4 +13,7 @@ declare interface RoomMemory {
 
   // TODO
   // reservedRoomNames: string[];
+
+  // Tower Memory
+  towers: {[towerId: string]: TowerMemory};
 }
