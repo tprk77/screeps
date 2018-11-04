@@ -6,8 +6,8 @@ import * as Utils from "./utils";
 
 export class Tower {
 
+  public static readonly RESERVE_CAPACITY_RATIO = 0.5;
   public static readonly DELAY_COUNTDOWN_TICKS = 20;
-  public static readonly RESERVE_ENERGY = 500;
 
   public static run(tower: StructureTower): void {
     const towerMemory = Utils.getTowerMemory(tower);
@@ -19,11 +19,12 @@ export class Tower {
     const nextDelayCountdown =
         hostile ? Math.max(delayCountdown - 1, 0) : Tower.DELAY_COUNTDOWN_TICKS;
     towerMemory.delayCountdown = nextDelayCountdown;
+    const reserveEnergyThreshold = Tower.RESERVE_CAPACITY_RATIO * tower.energyCapacity;
     if (hostile) {
       if (delayCountdown === 0) {
         tower.attack(hostile);
       }
-    } else if (tower.energy > Tower.RESERVE_ENERGY) {
+    } else if (tower.energy > reserveEnergyThreshold) {
       // Always save energy to attack
       const hurtCreep = tower.pos.findClosestByRange(FIND_MY_CREEPS, {
         filter: (creep) => creep.hits < creep.hitsMax,
