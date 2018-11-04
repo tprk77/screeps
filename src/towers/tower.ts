@@ -14,24 +14,24 @@ export class Tower {
     const delayCountdown = getOrInitialize(towerMemory, "delayCountdown", () => {
       return Tower.DELAY_COUNTDOWN_TICKS;
     });
-    const closestHostile = tower.pos.findClosestByRange(FIND_HOSTILE_CREEPS);
+    const hostile = tower.pos.findClosestByRange(FIND_HOSTILE_CREEPS);
     // Update the delay countdown
     const nextDelayCountdown =
-        closestHostile ? Math.max(delayCountdown - 1, 0) : Tower.DELAY_COUNTDOWN_TICKS;
+        hostile ? Math.max(delayCountdown - 1, 0) : Tower.DELAY_COUNTDOWN_TICKS;
     towerMemory.delayCountdown = nextDelayCountdown;
-    if (closestHostile) {
+    if (hostile) {
       if (delayCountdown === 0) {
-        tower.attack(closestHostile);
+        tower.attack(hostile);
       }
     } else if (tower.energy > Tower.RESERVE_ENERGY) {
       // Only repair if we have enough energy to attack
-      const closestDamagedStructure = tower.pos.findClosestByRange(FIND_STRUCTURES, {
+      const damagedStructure = tower.pos.findClosestByRange(FIND_STRUCTURES, {
         filter: (structure) => (structure.structureType !== STRUCTURE_WALL
                                 && structure.structureType !== STRUCTURE_RAMPART
                                 && structure.hits < structure.hitsMax),
       });
-      if (closestDamagedStructure) {
-        tower.repair(closestDamagedStructure);
+      if (damagedStructure) {
+        tower.repair(damagedStructure);
       }
     }
   }
