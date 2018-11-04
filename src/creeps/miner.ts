@@ -1,5 +1,7 @@
 // Copyright (c) 2018 Tim Perkins
 
+import {getOrInitialize} from "../utils/common";
+
 import {Harvest} from "./tasks/harvest";
 import {StoreInNearbyContainer} from "./tasks/store";
 import * as Utils from "./utils";
@@ -29,7 +31,7 @@ export class Miner {
    * of WORK parts, but don't need many CARRY or MOVE parts.
    */
   public static run(creep: Creep): void {
-    const fullEnergyThreshold = Utils.getOrSetMemory(creep, "fullEnergyThreshold", () => {
+    const fullEnergyThreshold = getOrInitialize(creep.memory, "fullEnergyThreshold", () => {
       return Utils.getNoDropEnergyThreshold(creep);
     });
     if (!creep.memory.harvesting && creep.carry.energy === 0) {

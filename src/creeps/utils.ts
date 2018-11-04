@@ -26,14 +26,6 @@ export function runTasks(creep: Creep, tasks: (Task|null)[]) {
 }
 
 /**
- * Tries to get a value from memory, or sets it with the initializer.
- */
-export function getOrSetMemory<T>(creep: Creep, memoryPath: string, initializer: () => T): T {
-  _.set(creep.memory, memoryPath, initializer());
-  return _.get(creep.memory, memoryPath);
-}
-
-/**
  * Gets the energy a creep can harvest without dropping any.
  *
  * TODO: Consider boosted parts!
