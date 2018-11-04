@@ -25,19 +25,26 @@ export class Tower {
       }
     } else if (tower.energy > Tower.RESERVE_ENERGY) {
       // Always save energy to attack
-      const damagedContainer = tower.pos.findClosestByRange(FIND_STRUCTURES, {
-        filter: (structure) =>
-            (structure.structureType === STRUCTURE_CONTAINER && structure.hits < structure.hitsMax),
+      const hurtCreep = tower.pos.findClosestByRange(FIND_MY_CREEPS, {
+        filter: (creep) => creep.hits < creep.hitsMax,
       });
-      const damagedStructure =
-          damagedContainer ? null : tower.pos.findClosestByRange(FIND_STRUCTURES, {
-            filter: (structure) => (structure.structureType !== STRUCTURE_WALL
-                                    && structure.structureType !== STRUCTURE_RAMPART
-                                    && structure.hits < structure.hitsMax),
-          });
-      const damagedThing = damagedContainer || damagedStructure;
-      if (damagedThing) {
-        tower.repair(damagedThing);
+      if (hurtCreep) {
+        tower.heal(hurtCreep);
+      } else {
+        const damagedContainer = tower.pos.findClosestByRange(FIND_STRUCTURES, {
+          filter: (structure) => (structure.structureType === STRUCTURE_CONTAINER
+                                  && structure.hits < structure.hitsMax),
+        });
+        const damagedStructure =
+            damagedContainer ? null : tower.pos.findClosestByRange(FIND_STRUCTURES, {
+              filter: (structure) => (structure.structureType !== STRUCTURE_WALL
+                                      && structure.structureType !== STRUCTURE_RAMPART
+                                      && structure.hits < structure.hitsMax),
+            });
+        const damagedThing = damagedContainer || damagedStructure;
+        if (damagedThing) {
+          tower.repair(damagedThing);
+        }
       }
     }
   }
