@@ -24,14 +24,20 @@ export class Tower {
         tower.attack(hostile);
       }
     } else if (tower.energy > Tower.RESERVE_ENERGY) {
-      // Only repair if we have enough energy to attack
-      const damagedStructure = tower.pos.findClosestByRange(FIND_STRUCTURES, {
-        filter: (structure) => (structure.structureType !== STRUCTURE_WALL
-                                && structure.structureType !== STRUCTURE_RAMPART
-                                && structure.hits < structure.hitsMax),
+      // Always save energy to attack
+      const damagedContainer = tower.pos.findClosestByRange(FIND_STRUCTURES, {
+        filter: (structure) =>
+            (structure.structureType === STRUCTURE_CONTAINER && structure.hits < structure.hitsMax),
       });
-      if (damagedStructure) {
-        tower.repair(damagedStructure);
+      const damagedStructure =
+          damagedContainer ? null : tower.pos.findClosestByRange(FIND_STRUCTURES, {
+            filter: (structure) => (structure.structureType !== STRUCTURE_WALL
+                                    && structure.structureType !== STRUCTURE_RAMPART
+                                    && structure.hits < structure.hitsMax),
+          });
+      const damagedThing = damagedContainer || damagedStructure;
+      if (damagedThing) {
+        tower.repair(damagedThing);
       }
     }
   }
