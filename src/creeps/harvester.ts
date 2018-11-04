@@ -1,5 +1,7 @@
 // Copyright (c) 2018 Tim Perkins
 
+import {getOrInitialize} from "../utils/common";
+
 import {Build} from "./tasks/build";
 import {Deposit} from "./tasks/deposit";
 import {GraveDig} from "./tasks/gravedig";
@@ -21,7 +23,7 @@ export class Harvester {
   public static readonly REPEAT_PARTS = true;
 
   public static run(creep: Creep): void {
-    const fullEnergyThreshold = Utils.getOrSetMemory(creep, "fullEnergyThreshold", () => {
+    const fullEnergyThreshold = getOrInitialize(creep.memory, "fullEnergyThreshold", () => {
       return Utils.getNoDropEnergyThreshold(creep);
     });
     if (!creep.memory.harvesting && creep.carry.energy === 0) {
