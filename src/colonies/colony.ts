@@ -8,7 +8,6 @@ import {Claimer} from "../creeps/claimer";
 import {Harvester} from "../creeps/harvester";
 import {Miner} from "../creeps/miner";
 import {Upgrader} from "../creeps/upgrader";
-import {Role} from "../creeps/utils";
 import {Waller} from "../creeps/waller";
 import {Tower} from "../towers/tower";
 
@@ -26,7 +25,7 @@ function C(room: Room): string {
  */
 export class Colony {
 
-  private static readonly _ROLES_BY_NAME: {[roleName: string]: Role} = {
+  private static readonly _ROLES_BY_NAME: {[roleName: string]: Utils.Role} = {
     [Harvester.ROLE_NAME]: Harvester,
     [Miner.ROLE_NAME]: Miner,
     [Builder.ROLE_NAME]: Builder,

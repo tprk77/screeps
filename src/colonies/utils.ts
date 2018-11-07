@@ -2,6 +2,8 @@
 
 import {Role} from "../creeps/utils";
 
+export {Role};
+
 /**
  * Population targets by role.
  */
