@@ -26,6 +26,16 @@ function C(room: Room): string {
  */
 export class Colony {
 
+  private static readonly _SPAWN_ORDER: string[] = [
+    Harvester.ROLE_NAME,
+    Miner.ROLE_NAME,
+    Builder.ROLE_NAME,
+    Upgrader.ROLE_NAME,
+    Waller.ROLE_NAME,
+    Attacker.ROLE_NAME,
+    Claimer.ROLE_NAME,
+  ];
+
   private static readonly _ENERGY_CAPS: {[roleName: string]: number} = {
     [Harvester.ROLE_NAME]: 1000,
     [Builder.ROLE_NAME]: 1000,
@@ -137,18 +147,8 @@ export class Colony {
     const rolePopulations = _.mapValues(roleDescriptions, (description) => {
       return _.filter(creeps, (creep) => Utils.hasRole(description.role, creep)).length;
     });
-    // The order in which to spawn creeps (highest priority first)
-    const spawnOrder = [
-      Harvester.ROLE_NAME,
-      Miner.ROLE_NAME,
-      Builder.ROLE_NAME,
-      Upgrader.ROLE_NAME,
-      Waller.ROLE_NAME,
-      Attacker.ROLE_NAME,
-      Claimer.ROLE_NAME,
-    ];
     // Determine what to spawn
-    for (const roleName of spawnOrder) {
+    for (const roleName of Colony._SPAWN_ORDER) {
       const roleDescription = roleDescriptions[roleName];
       const rolePopulation = rolePopulations[roleName];
       if ((roleDescription.atLevel == null || controller.level >= roleDescription.atLevel)
