@@ -46,6 +46,17 @@ export class Colony {
     Claimer.ROLE_NAME,
   ];
 
+  private static readonly _DEFAULT_POPULATIONS: Utils.RolePopulations = {
+    [Harvester.ROLE_NAME]: {population: 4},
+    // Miner population is overwritten per colony
+    [Miner.ROLE_NAME]: {population: 0, atLevel: 2},
+    [Builder.ROLE_NAME]: {population: 2},
+    [Upgrader.ROLE_NAME]: {population: 4},
+    [Waller.ROLE_NAME]: {population: 2},
+    [Attacker.ROLE_NAME]: {population: 6},
+    [Claimer.ROLE_NAME]: {population: 1, atLevel: 3},
+  };
+
   private static readonly _ENERGY_CAPS: {[roleName: string]: number} = {
     [Harvester.ROLE_NAME]: 1000,
     [Builder.ROLE_NAME]: 1000,
@@ -138,32 +149,22 @@ export class Colony {
       return;
     }
     const spawn = spawns[0];
-    // Description of what the colony's creeps should be
-    interface RoleDescriptions {
-      [roleName: string]: {role: Role, population: number, atLevel?: number};
-    }
-    // Make a miner per source
-    const minerPopulation = room.memory.sourceIds.length;
-    const roleDescriptions: RoleDescriptions = {
-      [Harvester.ROLE_NAME]: {role: Harvester, population: 4},
-      [Miner.ROLE_NAME]: {role: Miner, population: minerPopulation, atLevel: 2},
-      [Builder.ROLE_NAME]: {role: Builder, population: 2},
-      [Upgrader.ROLE_NAME]: {role: Upgrader, population: 4},
-      [Waller.ROLE_NAME]: {role: Waller, population: 2},
-      [Attacker.ROLE_NAME]: {role: Attacker, population: 6},
-      [Claimer.ROLE_NAME]: {role: Claimer, population: 1, atLevel: 3},
-    } as RoleDescriptions;
+    // Copy the default, but adjust to make a miner per source
+    const targetPopulations = _.merge({}, Colony._DEFAULT_POPULATIONS) as Utils.RolePopulations;
+    const targetMinerPopulation = room.memory.sourceIds.length;
+    targetPopulations[Miner.ROLE_NAME].population = targetMinerPopulation;
     // Get the actual population for each role
-    const rolePopulations = _.mapValues(roleDescriptions, (description) => {
-      return _.filter(creeps, (creep) => description.role.ROLE_NAME === creep.memory.role).length;
-    });
+    const actualPopulations = (() => {
+      const creepsByRole = _.groupBy(creeps, (creep) => creep.memory.role);
+      return _.mapValues(creepsByRole, (creeps) => creeps.length);
+    })();
     // Determine what to spawn
     for (const roleName of Colony._SPAWN_ORDER) {
-      const roleDescription = roleDescriptions[roleName];
-      const rolePopulation = rolePopulations[roleName];
-      if ((roleDescription.atLevel == null || controller.level >= roleDescription.atLevel)
-          && rolePopulation < roleDescription.population) {
-        const role = roleDescription.role;
+      const targetPopulation = targetPopulations[roleName];
+      const actualPopulation = actualPopulations[roleName];
+      if ((targetPopulation.atLevel == null || controller.level >= targetPopulation.atLevel)
+          && actualPopulation < targetPopulation.population) {
+        const role = Colony._ROLES_BY_NAME[roleName];
         const name = Utils.generateCreepName(role, Game.time);
         const memory = Utils.generateMemory(role);
         // Check for an energy cap on this role

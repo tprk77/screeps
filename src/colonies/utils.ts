@@ -3,6 +3,13 @@
 import {Role} from "../creeps/utils";
 
 /**
+ * Population targets by role.
+ */
+export interface RolePopulations {
+  [roleName: string]: {population: number, atLevel?: number};
+}
+
+/**
  * Just capitalize a string. (Is there a better place to put this?)
  */
 function capitalize(str: string) {
