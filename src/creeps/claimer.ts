@@ -6,7 +6,7 @@ import * as Utils from "./utils";
 
 export class Claimer {
 
-  public static readonly ROLE_NAME = "cliamer";
+  public static readonly ROLE_NAME = "claimer";
   public static readonly PART_TEMPLATE = [CLAIM, MOVE];
   private static readonly _PG_A = [CLAIM, MOVE];
   public static readonly PART_GROUPS = [Claimer._PG_A];
