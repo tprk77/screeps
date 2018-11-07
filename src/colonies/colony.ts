@@ -26,6 +26,16 @@ function C(room: Room): string {
  */
 export class Colony {
 
+  private static readonly _ROLES_BY_NAME: {[roleName: string]: Role} = {
+    [Harvester.ROLE_NAME]: Harvester,
+    [Miner.ROLE_NAME]: Miner,
+    [Builder.ROLE_NAME]: Builder,
+    [Upgrader.ROLE_NAME]: Upgrader,
+    [Waller.ROLE_NAME]: Waller,
+    [Attacker.ROLE_NAME]: Attacker,
+    [Claimer.ROLE_NAME]: Claimer,
+  };
+
   private static readonly _SPAWN_ORDER: string[] = [
     Harvester.ROLE_NAME,
     Miner.ROLE_NAME,
@@ -145,7 +155,7 @@ export class Colony {
     } as RoleDescriptions;
     // Get the actual population for each role
     const rolePopulations = _.mapValues(roleDescriptions, (description) => {
-      return _.filter(creeps, (creep) => Utils.hasRole(description.role, creep)).length;
+      return _.filter(creeps, (creep) => description.role.ROLE_NAME === creep.memory.role).length;
     });
     // Determine what to spawn
     for (const roleName of Colony._SPAWN_ORDER) {
@@ -219,22 +229,9 @@ export class Colony {
    */
   private static runCreeps(room: Room, creeps: Creep[]): void {
     for (const creep of creeps) {
-      if (creep.spawning) {
-        // Do nothing, skip this creep
-      } else if (creep.memory.role === "harvester") {
-        Harvester.run(creep);
-      } else if (creep.memory.role === "miner") {
-        Miner.run(creep);
-      } else if (creep.memory.role === "builder") {
-        Builder.run(creep);
-      } else if (creep.memory.role === "upgrader") {
-        Upgrader.run(creep);
-      } else if (creep.memory.role === "waller") {
-        Waller.run(creep);
-      } else if (creep.memory.role === "attacker") {
-        Attacker.run(creep);
-      } else if (creep.memory.role === "claimer") {
-        Claimer.run(creep);
+      if (!creep.spawning) {
+        const role = Colony._ROLES_BY_NAME[creep.memory.role];
+        role.run(creep);
       }
     }
   }

@@ -24,13 +24,6 @@ export function generateMemory(role: Role): CreepMemory {
 }
 
 /**
- * Check if the creep has a role. (Checks the memory of the creep.)
- */
-export function hasRole(role: Role, creep: Creep): boolean {
-  return creep.memory.role === role.ROLE_NAME;
-}
-
-/**
  * Get the total cost of some parts.
  *
  * @param parts The parts to get the cost of.
