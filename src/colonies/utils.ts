@@ -3,6 +3,13 @@
 import {Role} from "../creeps/utils";
 
 /**
+ * Population targets by role.
+ */
+export interface RolePopulations {
+  [roleName: string]: {population: number, atLevel?: number};
+}
+
+/**
  * Just capitalize a string. (Is there a better place to put this?)
  */
 function capitalize(str: string) {
@@ -21,13 +28,6 @@ export function generateCreepName(role: Role, tick: number): string {
  */
 export function generateMemory(role: Role): CreepMemory {
   return {role: role.ROLE_NAME} as CreepMemory;
-}
-
-/**
- * Check if the creep has a role. (Checks the memory of the creep.)
- */
-export function hasRole(role: Role, creep: Creep): boolean {
-  return creep.memory.role === role.ROLE_NAME;
 }
 
 /**

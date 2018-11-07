@@ -26,6 +26,37 @@ function C(room: Room): string {
  */
 export class Colony {
 
+  private static readonly _ROLES_BY_NAME: {[roleName: string]: Role} = {
+    [Harvester.ROLE_NAME]: Harvester,
+    [Miner.ROLE_NAME]: Miner,
+    [Builder.ROLE_NAME]: Builder,
+    [Upgrader.ROLE_NAME]: Upgrader,
+    [Waller.ROLE_NAME]: Waller,
+    [Attacker.ROLE_NAME]: Attacker,
+    [Claimer.ROLE_NAME]: Claimer,
+  };
+
+  private static readonly _SPAWN_ORDER: string[] = [
+    Harvester.ROLE_NAME,
+    Miner.ROLE_NAME,
+    Builder.ROLE_NAME,
+    Upgrader.ROLE_NAME,
+    Waller.ROLE_NAME,
+    Attacker.ROLE_NAME,
+    Claimer.ROLE_NAME,
+  ];
+
+  private static readonly _DEFAULT_POPULATIONS: Utils.RolePopulations = {
+    [Harvester.ROLE_NAME]: {population: 4},
+    // Miner population is overwritten per colony
+    [Miner.ROLE_NAME]: {population: 0, atLevel: 2},
+    [Builder.ROLE_NAME]: {population: 2},
+    [Upgrader.ROLE_NAME]: {population: 4},
+    [Waller.ROLE_NAME]: {population: 2},
+    [Attacker.ROLE_NAME]: {population: 6},
+    [Claimer.ROLE_NAME]: {population: 1, atLevel: 3},
+  };
+
   private static readonly _ENERGY_CAPS: {[roleName: string]: number} = {
     [Harvester.ROLE_NAME]: 1000,
     [Builder.ROLE_NAME]: 1000,
@@ -118,42 +149,22 @@ export class Colony {
       return;
     }
     const spawn = spawns[0];
-    // Description of what the colony's creeps should be
-    interface RoleDescriptions {
-      [roleName: string]: {role: Role, population: number, atLevel?: number};
-    }
-    // Make a miner per source
-    const minerPopulation = room.memory.sourceIds.length;
-    const roleDescriptions: RoleDescriptions = {
-      [Harvester.ROLE_NAME]: {role: Harvester, population: 4},
-      [Miner.ROLE_NAME]: {role: Miner, population: minerPopulation, atLevel: 2},
-      [Builder.ROLE_NAME]: {role: Builder, population: 2},
-      [Upgrader.ROLE_NAME]: {role: Upgrader, population: 4},
-      [Waller.ROLE_NAME]: {role: Waller, population: 2},
-      [Attacker.ROLE_NAME]: {role: Attacker, population: 6},
-      [Claimer.ROLE_NAME]: {role: Claimer, population: 1, atLevel: 3},
-    } as RoleDescriptions;
+    // Copy the default, but adjust to make a miner per source
+    const targetPopulations = _.merge({}, Colony._DEFAULT_POPULATIONS) as Utils.RolePopulations;
+    const targetMinerPopulation = room.memory.sourceIds.length;
+    targetPopulations[Miner.ROLE_NAME].population = targetMinerPopulation;
     // Get the actual population for each role
-    const rolePopulations = _.mapValues(roleDescriptions, (description) => {
-      return _.filter(creeps, (creep) => Utils.hasRole(description.role, creep)).length;
-    });
-    // The order in which to spawn creeps (highest priority first)
-    const spawnOrder = [
-      Harvester.ROLE_NAME,
-      Miner.ROLE_NAME,
-      Builder.ROLE_NAME,
-      Upgrader.ROLE_NAME,
-      Waller.ROLE_NAME,
-      Attacker.ROLE_NAME,
-      Claimer.ROLE_NAME,
-    ];
+    const actualPopulations = (() => {
+      const creepsByRole = _.groupBy(creeps, (creep) => creep.memory.role);
+      return _.mapValues(creepsByRole, (creeps) => creeps.length);
+    })();
     // Determine what to spawn
-    for (const roleName of spawnOrder) {
-      const roleDescription = roleDescriptions[roleName];
-      const rolePopulation = rolePopulations[roleName];
-      if ((roleDescription.atLevel == null || controller.level >= roleDescription.atLevel)
-          && rolePopulation < roleDescription.population) {
-        const role = roleDescription.role;
+    for (const roleName of Colony._SPAWN_ORDER) {
+      const targetPopulation = targetPopulations[roleName];
+      const actualPopulation = actualPopulations[roleName];
+      if ((targetPopulation.atLevel == null || controller.level >= targetPopulation.atLevel)
+          && actualPopulation < targetPopulation.population) {
+        const role = Colony._ROLES_BY_NAME[roleName];
         const name = Utils.generateCreepName(role, Game.time);
         const memory = Utils.generateMemory(role);
         // Check for an energy cap on this role
@@ -219,22 +230,9 @@ export class Colony {
    */
   private static runCreeps(room: Room, creeps: Creep[]): void {
     for (const creep of creeps) {
-      if (creep.spawning) {
-        // Do nothing, skip this creep
-      } else if (creep.memory.role === "harvester") {
-        Harvester.run(creep);
-      } else if (creep.memory.role === "miner") {
-        Miner.run(creep);
-      } else if (creep.memory.role === "builder") {
-        Builder.run(creep);
-      } else if (creep.memory.role === "upgrader") {
-        Upgrader.run(creep);
-      } else if (creep.memory.role === "waller") {
-        Waller.run(creep);
-      } else if (creep.memory.role === "attacker") {
-        Attacker.run(creep);
-      } else if (creep.memory.role === "claimer") {
-        Claimer.run(creep);
+      if (!creep.spawning) {
+        const role = Colony._ROLES_BY_NAME[creep.memory.role];
+        role.run(creep);
       }
     }
   }
