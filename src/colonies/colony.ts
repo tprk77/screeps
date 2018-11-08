@@ -155,7 +155,9 @@ export class Colony {
     // Get the actual population for each role
     const actualPopulations = (() => {
       const creepsByRole = _.groupBy(creeps, (creep) => creep.memory.role);
-      return _.mapValues(creepsByRole, (creeps) => creeps.length);
+      return _.mapValues(Colony._ROLES_BY_NAME, (_, roleName) => {
+        return (creepsByRole[roleName as string] || []).length;
+      });
     })();
     // Determine what to spawn
     for (const roleName of Colony._SPAWN_ORDER) {
