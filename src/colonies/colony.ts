@@ -50,9 +50,9 @@ export class Colony {
     // Miner population is overwritten per colony
     [Miner.ROLE_NAME]: {population: 0, atLevel: 2},
     [Builder.ROLE_NAME]: {population: 2},
-    [Upgrader.ROLE_NAME]: {population: 4},
+    [Upgrader.ROLE_NAME]: {population: 1},
     [Waller.ROLE_NAME]: {population: 2},
-    [Attacker.ROLE_NAME]: {population: 6},
+    [Attacker.ROLE_NAME]: {population: 4},
     [Claimer.ROLE_NAME]: {population: 1, atLevel: 3},
   };
 
@@ -152,6 +152,10 @@ export class Colony {
     const targetPopulations = _.merge({}, Colony._DEFAULT_POPULATIONS) as Utils.RolePopulations;
     const targetMinerPopulation = room.memory.sourceIds.length;
     targetPopulations[Miner.ROLE_NAME].population = targetMinerPopulation;
+    // TODO HACK Only spawn claimer in my main room
+    if (room.name !== "E52S56") {
+      targetPopulations[Claimer.ROLE_NAME].population = 0;
+    }
     // Get the actual population for each role
     const actualPopulations = (() => {
       const creepsByRole = _.groupBy(creeps, (creep) => creep.memory.role);
