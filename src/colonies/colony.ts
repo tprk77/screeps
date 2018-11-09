@@ -152,6 +152,10 @@ export class Colony {
     const targetPopulations = _.merge({}, Colony._DEFAULT_POPULATIONS) as Utils.RolePopulations;
     const targetMinerPopulation = room.memory.sourceIds.length;
     targetPopulations[Miner.ROLE_NAME].population = targetMinerPopulation;
+    // TODO HACK Only spawn claimer in my main room
+    if (room.name !== "E52S56") {
+      targetPopulations[Claimer.ROLE_NAME].population = 0;
+    }
     // Get the actual population for each role
     const actualPopulations = (() => {
       const creepsByRole = _.groupBy(creeps, (creep) => creep.memory.role);
