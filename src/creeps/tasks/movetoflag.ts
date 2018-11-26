@@ -6,7 +6,7 @@ export class MoveToFlag {
 
   private _flag: Flag;
 
-  constructor(flag: Flag) {
+  private constructor(flag: Flag) {
     this._flag = flag;
   }
 
@@ -29,7 +29,7 @@ export class MoveToFlagRoom {
 
   private _flag: Flag;
 
-  constructor(flag: Flag) {
+  private constructor(flag: Flag) {
     this._flag = flag;
   }
 
