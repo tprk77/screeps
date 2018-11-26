@@ -202,7 +202,7 @@ export class Colony {
         } else if (role === Attacker) {
           memory.attackFlagName = "AttackFlag";
         } else if (role === Claimer) {
-          memory.attackFlagName = "ClaimerFlag";
+          memory.claimFlagName = "ClaimFlag";
         }
         // Actually try to spawn the creep
         console.log(C(room) + "Wants to spawn: " + name);
