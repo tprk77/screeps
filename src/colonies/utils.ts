@@ -12,17 +12,10 @@ export interface RolePopulations {
 }
 
 /**
- * Just capitalize a string. (Is there a better place to put this?)
- */
-function capitalize(str: string) {
-  return str.charAt(0).toUpperCase() + str.slice(1);
-}
-
-/**
  * Generate a creep name based on its role.
  */
 export function generateCreepName(role: Role, tick: number): string {
-  return capitalize(role.ROLE_NAME) + "_" + tick;
+  return _.capitalize(_.camelCase(role.ROLE_NAME)) + "_" + tick;
 }
 
 /**

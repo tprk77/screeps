@@ -52,7 +52,7 @@ export class Colony {
     [Builder.ROLE_NAME]: {population: 2},
     [Upgrader.ROLE_NAME]: {population: 1},
     [Waller.ROLE_NAME]: {population: 2},
-    [Attacker.ROLE_NAME]: {population: 4},
+    [Attacker.ROLE_NAME]: {population: 2},
     [Claimer.ROLE_NAME]: {population: 1, atLevel: 3},
   };
 
@@ -183,32 +183,35 @@ export class Colony {
             role.REPEAT_PARTS,
         );
         // TODO HACKS Adjust as necessary...
+        let postSpawnHook: (() => void)|null = null;
         if (role === Miner) {
           // Find which source this miner should use
-          for (const sourceId of room.memory.sourceIds) {
+          const vacantSourceId = _.find(room.memory.sourceIds, (sourceId) => {
             const minerName = room.memory.minerNameForSourceId[sourceId];
-            const minerCreep = minerName && Game.creeps[minerName];
-            if (!minerCreep) {
+            return !minerName || !Game.creeps[minerName];
+          });
+          if (vacantSourceId) {
+            memory.sourceId = vacantSourceId;
+            postSpawnHook = () => {
               // Assign the source to the miner
-              room.memory.minerNameForSourceId[sourceId] = name;
-              memory.sourceId = sourceId;
-              break;
-            }
-          }
-          // Ensure that we actually set a source ID
-          if (!memory.sourceId) {
+              room.memory.minerNameForSourceId[vacantSourceId] = name;
+            };
+          } else {
             continue;
           }
         } else if (role === Attacker) {
           memory.attackFlagName = "AttackFlag";
         } else if (role === Claimer) {
-          memory.attackFlagName = "ClaimerFlag";
+          memory.claimFlagName = "ClaimFlag";
         }
         // Actually try to spawn the creep
         console.log(C(room) + "Wants to spawn: " + name);
         if (spawn.spawnCreep(parts, name, {memory}) === OK) {
           console.log(C(room) + "Spawning new creep: " + name);
           room.memory.creepNames.push(name);
+          if (postSpawnHook) {
+            postSpawnHook();
+          }
         }
         break;
       }
