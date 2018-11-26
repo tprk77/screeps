@@ -52,7 +52,7 @@ export class Colony {
     [Builder.ROLE_NAME]: {population: 2},
     [Upgrader.ROLE_NAME]: {population: 1},
     [Waller.ROLE_NAME]: {population: 2},
-    [Attacker.ROLE_NAME]: {population: 4},
+    [Attacker.ROLE_NAME]: {population: 2},
     [Claimer.ROLE_NAME]: {population: 1, atLevel: 3},
   };
 
