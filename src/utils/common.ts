@@ -3,7 +3,7 @@
 /**
  * Tries to get a value, or initializes it with the initializer.
  */
-export function getOrInitialize<Memory, T>(obj: object, path: string, initializer: () => T): T {
+export function getOrInitialize<T>(obj: object, path: string, initializer: () => T): T {
   let value = _.get(obj, path) as T;
   if (value == null) {
     value = initializer();
