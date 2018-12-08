@@ -206,6 +206,8 @@ export class Colony {
           }
         } else if (role === Attacker) {
           memory.attackFlagName = "AttackFlag";
+        } else if (role === Builder) {
+          memory.buildFlagName = "BuildFlag";
         } else if (role === Claimer) {
           memory.claimFlagName = "ClaimFlag";
         } else if (role === Reserver) {
