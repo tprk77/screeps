@@ -14,12 +14,8 @@ export function loop() {
     }
   }
   // Find all controlled and claimed rooms
-  const claimedRooms = _.filter(Game.rooms, (room) => {
-    if (room.controller) {
-      return room.controller.my && room.controller.level > 0;
-    } else {
-      return false;
-    }
+  const claimedRooms = _.filter(Game.rooms as {[roomName: string]: Room}, (room) => {
+    return room.controller && room.controller.my;
   });
   // Run the colonies, one per claimed room
   for (const room of claimedRooms) {
