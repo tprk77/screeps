@@ -14,7 +14,7 @@ export interface Role {
 /**
  * Task interface, for running tasks. See also `runTasks`.
  */
-interface Task {
+export interface Task {
   run: (creep: Creep) => boolean;
 }
 
