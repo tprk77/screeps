@@ -51,13 +51,13 @@ export class Colony {
   private static readonly _DEFAULT_POPULATIONS: Utils.RolePopulations = {
     [Harvester.ROLE_NAME]: {population: 4},
     // Miner population is overwritten per colony
-    [Miner.ROLE_NAME]: {population: 0, atLevel: 2},
+    [Miner.ROLE_NAME]: {population: 0, atLevel: 4},
     [Builder.ROLE_NAME]: {population: 2},
     [Upgrader.ROLE_NAME]: {population: 1},
     [Waller.ROLE_NAME]: {population: 2},
     [Attacker.ROLE_NAME]: {population: 2},
-    [Claimer.ROLE_NAME]: {population: 0, atLevel: 3},
-    [Reserver.ROLE_NAME]: {population: 1, atLevel: 3},
+    [Claimer.ROLE_NAME]: {population: 0, atLevel: 4},
+    [Reserver.ROLE_NAME]: {population: 1, atLevel: 4},
   };
 
   private static readonly _ENERGY_CAPS: {[roleName: string]: number} = {
@@ -146,7 +146,6 @@ export class Colony {
    * @param creeps The creeps of the colony, mostly to count existing creeps.
    */
   private static runSpawns(room: Room, spawns: StructureSpawn[], creeps: Creep[]): void {
-    const controller = room.controller as StructureController;
     // TODO Mutli-spawn support
     if (!spawns.length) {
       return;
@@ -165,14 +164,14 @@ export class Colony {
     const actualPopulations = (() => {
       const creepsByRole = _.groupBy(creeps, (creep) => creep.memory.role);
       return _.mapValues(Colony._ROLES_BY_NAME, (_, roleName) => {
-        return (creepsByRole[roleName as string] || []).length;
+        return (creepsByRole[roleName!] || []).length;
       });
     })();
     // Determine what to spawn
     for (const roleName of Colony._SPAWN_ORDER) {
       const targetPopulation = targetPopulations[roleName];
       const actualPopulation = actualPopulations[roleName];
-      if ((targetPopulation.atLevel == null || controller.level >= targetPopulation.atLevel)
+      if ((targetPopulation.atLevel == null || room.controller!.level >= targetPopulation.atLevel)
           && actualPopulation < targetPopulation.population) {
         const role = Colony._ROLES_BY_NAME[roleName];
         const name = Utils.generateCreepName(role, Game.time);
@@ -206,6 +205,8 @@ export class Colony {
           }
         } else if (role === Attacker) {
           memory.attackFlagName = "AttackFlag";
+        } else if (role === Builder) {
+          memory.buildFlagName = "BuildFlag";
         } else if (role === Claimer) {
           memory.claimFlagName = "ClaimFlag";
         } else if (role === Reserver) {
