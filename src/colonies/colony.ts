@@ -146,7 +146,6 @@ export class Colony {
    * @param creeps The creeps of the colony, mostly to count existing creeps.
    */
   private static runSpawns(room: Room, spawns: StructureSpawn[], creeps: Creep[]): void {
-    const controller = room.controller as StructureController;
     // TODO Mutli-spawn support
     if (!spawns.length) {
       return;
@@ -165,14 +164,14 @@ export class Colony {
     const actualPopulations = (() => {
       const creepsByRole = _.groupBy(creeps, (creep) => creep.memory.role);
       return _.mapValues(Colony._ROLES_BY_NAME, (_, roleName) => {
-        return (creepsByRole[roleName as string] || []).length;
+        return (creepsByRole[roleName!] || []).length;
       });
     })();
     // Determine what to spawn
     for (const roleName of Colony._SPAWN_ORDER) {
       const targetPopulation = targetPopulations[roleName];
       const actualPopulation = actualPopulations[roleName];
-      if ((targetPopulation.atLevel == null || controller.level >= targetPopulation.atLevel)
+      if ((targetPopulation.atLevel == null || room.controller!.level >= targetPopulation.atLevel)
           && actualPopulation < targetPopulation.population) {
         const role = Colony._ROLES_BY_NAME[roleName];
         const name = Utils.generateCreepName(role, Game.time);
