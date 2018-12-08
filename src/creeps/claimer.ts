@@ -1,5 +1,6 @@
 // Copyright (c) 2018 Tim Perkins
 
+import {AttackController} from "./tasks/attackcontroller";
 import {Claim} from "./tasks/claim";
 import {MoveToFlag, MoveToFlagRoom} from "./tasks/movetoflag";
 import * as Utils from "./utils";
@@ -13,12 +14,17 @@ export class Claimer {
       [Claimer._PG_A, Claimer._PG_A, Claimer._PG_A, Claimer._PG_A, Claimer._PG_A];
   public static readonly REPEAT_PARTS = false;
 
+  private static readonly _WithFlag: Utils.WithFlagTask = Utils.makeWithFlagTask((creep) => {
+    const flagName = creep.memory.claimFlagName;
+    return flagName ? Game.flags[flagName] : null;
+  });
+
   public static run(creep: Creep): void {
-    const flag = Game.flags[creep.memory.claimFlagName];
     Utils.runTasks(creep, [
-      MoveToFlagRoom.forFlag(flag),
+      Claimer._WithFlag((flag) => MoveToFlagRoom.forFlag(flag)),
+      AttackController,
       Claim,
-      MoveToFlag.forFlag(flag),
+      Claimer._WithFlag((flag) => MoveToFlag.forFlag(flag)),
     ]);
   }
 }
