@@ -22,6 +22,11 @@ export class Builder {
   public static readonly PART_GROUPS = [Builder._PG_A];
   public static readonly REPEAT_PARTS = true;
 
+  private static readonly _WithFlag: Utils.WithFlagTask = Utils.makeWithFlagTask((creep) => {
+    const flagName = creep.memory.buildFlagName;
+    return flagName ? Game.flags[flagName] : null;
+  });
+
   public static run(creep: Creep): void {
     const fullEnergyThreshold = getOrInitialize(creep.memory, "fullEnergyThreshold", () => {
       return Utils.getNoDropEnergyThreshold(creep);
@@ -33,12 +38,11 @@ export class Builder {
       creep.memory.building = true;
       creep.say("Build");
     }
-    const flag = Game.flags[creep.memory.buildFlagName];
     if (creep.memory.building) {
       Utils.runTasks(creep, [
         MoveFromSource,
         MoveFromMinerSource,
-        MoveToFlagRoom.forFlag(flag),
+        Builder._WithFlag((flag) => MoveToFlagRoom.forFlag(flag)),
         Build,
         Deposit,
         Upgrade,

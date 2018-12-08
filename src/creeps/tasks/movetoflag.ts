@@ -10,8 +10,8 @@ export class MoveToFlag {
     this._flag = flag;
   }
 
-  public static forFlag(flag: Flag|null): MoveToFlag|null {
-    return flag ? new MoveToFlag(flag) : null;
+  public static forFlag(flag: Flag): MoveToFlag {
+    return new MoveToFlag(flag);
   }
 
   public run(creep: Creep): boolean {
@@ -33,8 +33,8 @@ export class MoveToFlagRoom {
     this._flag = flag;
   }
 
-  public static forFlag(flag: Flag|null): MoveToFlagRoom|null {
-    return flag ? new MoveToFlagRoom(flag) : null;
+  public static forFlag(flag: Flag): MoveToFlagRoom {
+    return new MoveToFlagRoom(flag);
   }
 
   public run(creep: Creep): boolean {
