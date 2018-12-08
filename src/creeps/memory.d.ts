@@ -24,4 +24,8 @@ declare interface CreepMemory {
 
   // Claimer memory
   claimFlagName: string;
+
+  // Reserver memory
+  reserveFlagNames: string[];
+  currentReserveFlagName: string|null;
 }
