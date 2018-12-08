@@ -7,6 +7,7 @@ import {Builder} from "../creeps/builder";
 import {Claimer} from "../creeps/claimer";
 import {Harvester} from "../creeps/harvester";
 import {Miner} from "../creeps/miner";
+import {Reserver} from "../creeps/reserver";
 import {Upgrader} from "../creeps/upgrader";
 import {Waller} from "../creeps/waller";
 import {Tower} from "../towers/tower";
@@ -33,6 +34,7 @@ export class Colony {
     [Waller.ROLE_NAME]: Waller,
     [Attacker.ROLE_NAME]: Attacker,
     [Claimer.ROLE_NAME]: Claimer,
+    [Reserver.ROLE_NAME]: Reserver,
   };
 
   private static readonly _SPAWN_ORDER: string[] = [
@@ -43,6 +45,7 @@ export class Colony {
     Waller.ROLE_NAME,
     Attacker.ROLE_NAME,
     Claimer.ROLE_NAME,
+    Reserver.ROLE_NAME,
   ];
 
   private static readonly _DEFAULT_POPULATIONS: Utils.RolePopulations = {
@@ -53,7 +56,8 @@ export class Colony {
     [Upgrader.ROLE_NAME]: {population: 1},
     [Waller.ROLE_NAME]: {population: 2},
     [Attacker.ROLE_NAME]: {population: 2},
-    [Claimer.ROLE_NAME]: {population: 1, atLevel: 3},
+    [Claimer.ROLE_NAME]: {population: 0, atLevel: 3},
+    [Reserver.ROLE_NAME]: {population: 1, atLevel: 3},
   };
 
   private static readonly _ENERGY_CAPS: {[roleName: string]: number} = {
@@ -155,6 +159,7 @@ export class Colony {
     // TODO HACK Only spawn claimer in my main room
     if (room.name !== "E52S56") {
       targetPopulations[Claimer.ROLE_NAME].population = 0;
+      targetPopulations[Reserver.ROLE_NAME].population = 0;
     }
     // Get the actual population for each role
     const actualPopulations = (() => {
@@ -203,6 +208,8 @@ export class Colony {
           memory.attackFlagName = "AttackFlag";
         } else if (role === Claimer) {
           memory.claimFlagName = "ClaimFlag";
+        } else if (role === Reserver) {
+          memory.reserveFlagNames = ["ReserveFlag1", "ReserveFlag2", "ReserveFlag3"];
         }
         // Actually try to spawn the creep
         console.log(C(room) + "Wants to spawn: " + name);

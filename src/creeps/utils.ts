@@ -14,8 +14,35 @@ export interface Role {
 /**
  * Task interface, for running tasks. See also `runTasks`.
  */
-interface Task {
+export interface Task {
   run: (creep: Creep) => boolean;
+}
+
+export function makeTask(lambda: (creep: Creep) => boolean): Task {
+  return {
+    run(creep: Creep): boolean {
+      return lambda(creep);
+    }
+  };
+}
+
+export type FlagRetriever = (creep: Creep) => Flag|null;
+export type TaskFromFlag = (flag: Flag) => Task;
+export type WithFlagTask = (taskFromFlag: TaskFromFlag) => Task;
+
+export function makeWithFlagTask(flagRetriever: FlagRetriever): WithFlagTask {
+  return (taskFromFlag: TaskFromFlag) => {
+    return {
+      run(creep: Creep): boolean {
+        const flag = flagRetriever(creep);
+        if (flag) {
+          return taskFromFlag(flag).run(creep);
+        } else {
+          return false;
+        }
+      }
+    };
+  };
 }
 
 /**
