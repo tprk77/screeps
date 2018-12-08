@@ -51,13 +51,13 @@ export class Colony {
   private static readonly _DEFAULT_POPULATIONS: Utils.RolePopulations = {
     [Harvester.ROLE_NAME]: {population: 4},
     // Miner population is overwritten per colony
-    [Miner.ROLE_NAME]: {population: 0, atLevel: 2},
+    [Miner.ROLE_NAME]: {population: 0, atLevel: 4},
     [Builder.ROLE_NAME]: {population: 2},
     [Upgrader.ROLE_NAME]: {population: 1},
     [Waller.ROLE_NAME]: {population: 2},
     [Attacker.ROLE_NAME]: {population: 2},
-    [Claimer.ROLE_NAME]: {population: 0, atLevel: 3},
-    [Reserver.ROLE_NAME]: {population: 1, atLevel: 3},
+    [Claimer.ROLE_NAME]: {population: 0, atLevel: 4},
+    [Reserver.ROLE_NAME]: {population: 1, atLevel: 4},
   };
 
   private static readonly _ENERGY_CAPS: {[roleName: string]: number} = {
