@@ -118,7 +118,7 @@ export function arrangeParts(partTemplate: BodyPartConstant[],
   const partGroupings = _.groupBy(jumbledParts, _.identity);
   // Add the parts in the template
   for (const part of partTemplate) {
-    const maybeParts: BodyPartConstant[] | null = partGroupings[part];
+    const maybeParts: BodyPartConstant[]|null = partGroupings[part];
     if (maybeParts != null) {
       parts.push(...maybeParts);
       delete partGroupings[part];
