@@ -1,5 +1,9 @@
 // Copyright (c) 2018 Tim Perkins
 
+import {AttackCreeps, AttackNearbyCreeps, AttackStructures} from "./tasks/attack";
+import {MoveToFlag, MoveToFlagRoom} from "./tasks/movetoflag";
+import * as Utils from "./utils";
+
 export class Attacker {
 
   public static readonly ROLE_NAME = "attacker";
@@ -15,41 +19,18 @@ export class Attacker {
   ];
   public static readonly REPEAT_PARTS = false;
 
-  public static readonly NEARBY_ATTACK_RANGE = 5;
+  private static readonly _WithFlag: Utils.WithFlagTask = Utils.makeWithFlagTask((creep) => {
+    const flagName = creep.memory.attackFlagName;
+    return flagName ? Game.flags[flagName] : null;
+  });
 
   public static run(creep: Creep): void {
-    const flag = Game.flags[creep.memory.attackFlagName];
-    // Always attack nearby hostiles
-    const closestHostile = creep.pos.findClosestByRange(FIND_HOSTILE_CREEPS);
-    if (closestHostile && creep.pos.inRangeTo(closestHostile, Attacker.NEARBY_ATTACK_RANGE)) {
-      if (creep.attack(closestHostile) === ERR_NOT_IN_RANGE) {
-        creep.moveTo(closestHostile);
-      }
-    } else if (flag) {
-      if (creep.room === flag.room) {
-        // Attack creeps in the room
-        const closestHostile = creep.pos.findClosestByRange(FIND_HOSTILE_CREEPS);
-        if (closestHostile) {
-          if (creep.attack(closestHostile) === ERR_NOT_IN_RANGE) {
-            creep.moveTo(closestHostile);
-          }
-        } else {
-          const closestStructure = creep.pos.findClosestByRange(FIND_HOSTILE_STRUCTURES, {
-            filter: (structure) => structure.structureType !== STRUCTURE_CONTROLLER,
-          });
-          if (closestStructure) {
-            if (creep.attack(closestStructure) === ERR_NOT_IN_RANGE) {
-              creep.moveTo(closestStructure);
-            }
-          } else {
-            // Move to the flag if the room is clear
-            creep.moveTo(flag);
-          }
-        }
-      } else {
-        // Move to the room
-        creep.moveTo(flag);
-      }
-    }
+    Utils.runTasks(creep, [
+      AttackNearbyCreeps,
+      Attacker._WithFlag((flag) => MoveToFlagRoom.forFlag(flag)),
+      AttackCreeps,
+      AttackStructures,
+      Attacker._WithFlag((flag) => MoveToFlag.forFlag(flag, 0)),
+    ]);
   }
 }

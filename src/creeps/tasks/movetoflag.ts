@@ -2,21 +2,22 @@
 
 export class MoveToFlag {
 
-  public static readonly FLAG_DISTANCE_THRESHOLD = 2;
+  public static readonly DEFAULT_FLAG_RANGE = 2;
 
   private _flag: Flag;
+  private _flagRange: number;
 
-  private constructor(flag: Flag) {
+  private constructor(flag: Flag, flagRange: number) {
     this._flag = flag;
+    this._flagRange = flagRange;
   }
 
-  public static forFlag(flag: Flag): MoveToFlag {
-    return new MoveToFlag(flag);
+  public static forFlag(flag: Flag, flagRange: number = MoveToFlag.DEFAULT_FLAG_RANGE): MoveToFlag {
+    return new MoveToFlag(flag, flagRange);
   }
 
   public run(creep: Creep): boolean {
-    if (creep.room !== this._flag.room
-        || !creep.pos.inRangeTo(this._flag, MoveToFlag.FLAG_DISTANCE_THRESHOLD)) {
+    if (creep.room !== this._flag.room || !creep.pos.inRangeTo(this._flag, this._flagRange)) {
       creep.moveTo(this._flag, {visualizePathStyle: {stroke: "#ffffff"}});
       return true;
     } else {
