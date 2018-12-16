@@ -30,7 +30,7 @@ export class Attacker {
       Attacker._WithFlag((flag) => MoveToFlagRoom.forFlag(flag)),
       AttackCreeps,
       AttackStructures,
-      Attacker._WithFlag((flag) => MoveToFlag.forFlag(flag)),
+      Attacker._WithFlag((flag) => MoveToFlag.forFlag(flag, 0)),
     ]);
   }
 }
