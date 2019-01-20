@@ -33,10 +33,8 @@ export class Builder {
     });
     if (creep.memory.working && creep.carry.energy === 0) {
       creep.memory.working = false;
-      creep.say("Harvest");
     } else if (!creep.memory.working && creep.carry.energy >= fullEnergyThreshold) {
       creep.memory.working = true;
-      creep.say("Build");
     }
     if (creep.memory.working) {
       Utils.runTasks(creep, [
