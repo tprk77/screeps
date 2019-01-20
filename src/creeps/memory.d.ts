@@ -5,27 +5,16 @@ declare interface CreepMemory {
   role: string;
   sourceId?: string;
 
-  // Harvester memory
-  harvesting: boolean;
-  fullEnergyThreshold: number;
+  // Mutli-purpose state tracking
+  working: boolean;
 
-  // Upgrader memory
-  upgrading: boolean;
+  // Mutli-purpose flags
+  alphaFlagName: string|null;
+  betaFlagName: string|null;
+  gammaFlagName: string|null;
 
-  // Builder memory
-  building: boolean;
-  buildFlagName: string;
-
-  // Waller memory
-  walling: boolean;
-
-  // Attacker memory
-  attackFlagName: string;
-
-  // Claimer memory
-  claimFlagName: string;
-
-  // Reserver memory
-  reserveFlagNames: string[];
-  currentReserveFlagName: string|null;
+  // Possible candidate flags
+  alphaCandidateFlagNames: string[];
+  betaCandidateFlagNames: string[];
+  gammaCandidateFlagNames: string[];
 }

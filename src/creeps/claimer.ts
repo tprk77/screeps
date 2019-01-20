@@ -15,7 +15,7 @@ export class Claimer {
   public static readonly REPEAT_PARTS = false;
 
   private static readonly _WithFlag: Utils.WithFlagTask = Utils.makeWithFlagTask((creep) => {
-    const flagName = creep.memory.claimFlagName;
+    const flagName = creep.memory.alphaFlagName;
     return flagName ? Game.flags[flagName] : null;
   });
 

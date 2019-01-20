@@ -20,27 +20,27 @@ export class Reserver {
 
   private static readonly _SelectFlag: Utils.Task = Utils.makeTask((creep) => {
     // If there's a flag, keep the current one
-    if (creep.memory.currentReserveFlagName) {
+    if (creep.memory.alphaFlagName) {
       return false;
     }
     // TODO THE **COLONY** NEEDS TO COORDINATE MULTIPLE RESERVERS
     const flags = _.compact(
-        _.map(creep.memory.reserveFlagNames, (flagName) => Game.flags[flagName]),
+        _.map(creep.memory.alphaCandidateFlagNames, (flagName) => Game.flags[flagName]),
     );
-    const rooms = _.map(flags, (flag) => Game.rooms[flag.pos.roomName]);
-    const flagsAndRooms = _.zip<any>(flags, rooms) as [Flag, Room][];
+    const rooms = _.map(flags, (flag) => flag ? Game.rooms[flag.pos.roomName] : null);
+    const flagsAndRooms = _.zip<any>(flags, rooms) as [Flag, Room | null][];
     const [flagsWithoutRooms, flagsWithRooms] =
-        _.partition(flagsAndRooms, ([_, room]) => room == null);
+        _.partition(flagsAndRooms, ([_, room]) => room == null) as [[Flag, null][], [Flag, Room][]];
     if (flagsWithoutRooms.length) {
       // If some rooms aren't visible, go to the first one
       const flag = flagsWithoutRooms[0][0];
-      creep.memory.currentReserveFlagName = flag.name;
+      creep.memory.alphaFlagName = flag.name;
     } else if (flagsWithRooms.length) {
       const flagsWithControllers =
           _.filter(flagsWithRooms, ([_, room]) => room.controller && room.controller.level === 0);
       // If some rooms are visible, go to the lowest reservation
       const flagAndRoom = _.min(flagsWithControllers, Reserver._getReservationScore);
-      creep.memory.currentReserveFlagName = flagAndRoom[0].name;
+      creep.memory.alphaFlagName = flagAndRoom[0].name;
     }
     return false;
   });
@@ -57,12 +57,12 @@ export class Reserver {
   }
 
   private static _WithFlag: Utils.WithFlagTask = Utils.makeWithFlagTask((creep) => {
-    const flagName = creep.memory.currentReserveFlagName;
+    const flagName = creep.memory.alphaFlagName;
     return flagName ? Game.flags[flagName] : null;
   });
 
   private static readonly _ClearFlag: Utils.Task = Utils.makeTask((creep) => {
-    creep.memory.currentReserveFlagName = null;
+    creep.memory.alphaFlagName = null;
     return false;
   });
 

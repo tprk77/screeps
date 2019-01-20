@@ -23,7 +23,7 @@ export class Builder {
   public static readonly REPEAT_PARTS = true;
 
   private static readonly _WithFlag: Utils.WithFlagTask = Utils.makeWithFlagTask((creep) => {
-    const flagName = creep.memory.buildFlagName;
+    const flagName = creep.memory.alphaFlagName;
     return flagName ? Game.flags[flagName] : null;
   });
 
@@ -31,14 +31,12 @@ export class Builder {
     const fullEnergyThreshold = getOrInitialize(creep.memory, "fullEnergyThreshold", () => {
       return Utils.getNoDropEnergyThreshold(creep);
     });
-    if (creep.memory.building && creep.carry.energy === 0) {
-      creep.memory.building = false;
-      creep.say("Harvest");
-    } else if (!creep.memory.building && creep.carry.energy >= fullEnergyThreshold) {
-      creep.memory.building = true;
-      creep.say("Build");
+    if (creep.memory.working && creep.carry.energy === 0) {
+      creep.memory.working = false;
+    } else if (!creep.memory.working && creep.carry.energy >= fullEnergyThreshold) {
+      creep.memory.working = true;
     }
-    if (creep.memory.building) {
+    if (creep.memory.working) {
       Utils.runTasks(creep, [
         MoveFromSource,
         MoveFromMinerSource,

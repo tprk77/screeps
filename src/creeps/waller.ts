@@ -26,14 +26,12 @@ export class Waller {
     const fullEnergyThreshold = getOrInitialize(creep.memory, "fullEnergyThreshold", () => {
       return Utils.getNoDropEnergyThreshold(creep);
     });
-    if (creep.memory.walling && creep.carry.energy === 0) {
-      creep.memory.walling = false;
-      creep.say("Harvest");
-    } else if (!creep.memory.walling && creep.carry.energy >= fullEnergyThreshold) {
-      creep.memory.walling = true;
-      creep.say("Walling");
+    if (creep.memory.working && creep.carry.energy === 0) {
+      creep.memory.working = false;
+    } else if (!creep.memory.working && creep.carry.energy >= fullEnergyThreshold) {
+      creep.memory.working = true;
     }
-    if (creep.memory.walling) {
+    if (creep.memory.working) {
       Utils.runTasks(creep, [
         MoveFromSource,
         MoveFromMinerSource,
