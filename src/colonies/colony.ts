@@ -204,13 +204,13 @@ export class Colony {
             continue;
           }
         } else if (role === Attacker) {
-          memory.attackFlagName = "AttackFlag";
+          memory.alphaFlagName = "AttackFlag";
         } else if (role === Builder) {
-          memory.buildFlagName = "BuildFlag";
+          memory.alphaFlagName = "BuildFlag";
         } else if (role === Claimer) {
-          memory.claimFlagName = "ClaimFlag";
+          memory.alphaFlagName = "ClaimFlag";
         } else if (role === Reserver) {
-          memory.reserveFlagNames = ["ReserveFlag1", "ReserveFlag2", "ReserveFlag3"];
+          memory.alphaCandidateFlagNames = ["ReserveFlag1", "ReserveFlag2", "ReserveFlag3"];
         }
         // Actually try to spawn the creep
         console.log(C(room) + "Wants to spawn: " + name);

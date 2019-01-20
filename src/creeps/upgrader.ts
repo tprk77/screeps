@@ -23,14 +23,14 @@ export class Upgrader {
     const fullEnergyThreshold = getOrInitialize(creep.memory, "fullEnergyThreshold", () => {
       return Utils.getNoDropEnergyThreshold(creep);
     });
-    if (creep.memory.upgrading && creep.carry.energy === 0) {
-      creep.memory.upgrading = false;
+    if (creep.memory.working && creep.carry.energy === 0) {
+      creep.memory.working = false;
       creep.say("Harvest");
-    } else if (!creep.memory.upgrading && creep.carry.energy >= fullEnergyThreshold) {
-      creep.memory.upgrading = true;
+    } else if (!creep.memory.working && creep.carry.energy >= fullEnergyThreshold) {
+      creep.memory.working = true;
       creep.say("Upgrade");
     }
-    if (creep.memory.upgrading) {
+    if (creep.memory.working) {
       Utils.runTasks(creep, [
         MoveFromSource,
         MoveFromMinerSource,

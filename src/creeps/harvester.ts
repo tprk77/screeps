@@ -26,14 +26,14 @@ export class Harvester {
     const fullEnergyThreshold = getOrInitialize(creep.memory, "fullEnergyThreshold", () => {
       return Utils.getNoDropEnergyThreshold(creep);
     });
-    if (!creep.memory.harvesting && creep.carry.energy === 0) {
-      creep.memory.harvesting = true;
+    if (creep.memory.working && creep.carry.energy === 0) {
+      creep.memory.working = false;
       creep.say("Harvest");
-    } else if (creep.memory.harvesting && creep.carry.energy >= fullEnergyThreshold) {
-      creep.memory.harvesting = false;
+    } else if (!creep.memory.working && creep.carry.energy >= fullEnergyThreshold) {
+      creep.memory.working = true;
       creep.say("Deposit");
     }
-    if (!creep.memory.harvesting) {
+    if (creep.memory.working) {
       Utils.runTasks(creep, [
         MoveFromSource,
         MoveFromMinerSource,

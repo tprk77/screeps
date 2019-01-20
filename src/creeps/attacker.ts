@@ -20,7 +20,7 @@ export class Attacker {
   public static readonly REPEAT_PARTS = false;
 
   private static readonly _WithFlag: Utils.WithFlagTask = Utils.makeWithFlagTask((creep) => {
-    const flagName = creep.memory.attackFlagName;
+    const flagName = creep.memory.alphaFlagName;
     return flagName ? Game.flags[flagName] : null;
   });
 
