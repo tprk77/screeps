@@ -27,10 +27,10 @@ export class Reserver {
     const flags = _.compact(
         _.map(creep.memory.alphaCandidateFlagNames, (flagName) => Game.flags[flagName]),
     );
-    const rooms = _.map(flags, (flag) => Game.rooms[flag.pos.roomName]);
-    const flagsAndRooms = _.zip<any>(flags, rooms) as [Flag, Room][];
+    const rooms = _.map(flags, (flag) => flag ? Game.rooms[flag.pos.roomName] : null);
+    const flagsAndRooms = _.zip<any>(flags, rooms) as [Flag, Room | null][];
     const [flagsWithoutRooms, flagsWithRooms] =
-        _.partition(flagsAndRooms, ([_, room]) => room == null);
+        _.partition(flagsAndRooms, ([_, room]) => room == null) as [[Flag, null][], [Flag, Room][]];
     if (flagsWithoutRooms.length) {
       // If some rooms aren't visible, go to the first one
       const flag = flagsWithoutRooms[0][0];
